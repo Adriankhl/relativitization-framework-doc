@@ -2,6 +2,9 @@
 
 Work-in-progress programming/modeling documentation on [Relativitization](https://github.com/Adriankhl/relativitization).
 
+## Table of contents
+* [Theoretical basis](./papers/on-social-simulation-in-4D-relativistic-spacetime/pdf/paper.pdf)
+
 ## Contribute
 
 If you want to improve this documentation, feel free to create a pull request.
