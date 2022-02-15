@@ -4,6 +4,7 @@ Work-in-progress programming/modeling documentation on [Relativitization](https:
 
 ## Table of contents
 * [Theoretical basis](./papers/on-social-simulation-in-4D-relativistic-spacetime/pdf/paper.pdf)
+* [Framework introduction](./guide/framework-introduction.md)
 
 ## Contribute
 
