@@ -22,9 +22,14 @@ immutable version, or vice versa. To ensure that the serializer works:
 
 * The property names in the immutable version and the mutable version of a class should be the same
 * Use `sealed class` if you need polymorphism
-* If a polymorphic class is stored in some collections, enforce the same serialization name in both the immutable
-  version and the mutable version of the class by the `@SerialName` annotation
+* If a polymorphic class is stored in some collections, you need to enforce the same serialization name in both the
+  immutable version and the mutable version of the class by the `@SerialName` annotation
 
 ### Player data
 
-`PlayerData` and `MutablePlayerData` in `PlayerData.kt` are the immutable version and imm
+`PlayerData` in `PlayerData.kt` contains the core data of an agent/player in the computational environment, where the
+mutable version of it is `MutablePlayerData`. `PlayerData` stores the basic data of a player, such as the position and
+velocity. Other data is stored in `PlayerInternalData`, such as event and hierarchy. The
+`playerDataComponentMap` property in `PlayerInternalData` stores model-specific data.
+
+### Player data component
