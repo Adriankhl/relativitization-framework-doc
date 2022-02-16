@@ -27,9 +27,10 @@ immutable version, or vice versa. To ensure that the serializer works:
 
 ### Player data
 
-`PlayerData` in `PlayerData.kt` contains the core data of an agent/player in the computational environment, where the
-mutable version of it is `MutablePlayerData`. `PlayerData` stores the basic data of a player, such as the position and
-velocity. Other data is stored in `PlayerInternalData`, such as event and hierarchy. The
+`PlayerData` in `PlayerData.kt` contains the core data of a player, where `MutablePlayerData` is the corresponding
+mutable version. `PlayerData` stores the basic data of a player, such as the position and velocity. Other data is stored
+in `PlayerInternalData`, such as event and hierarchy. The
 `playerDataComponentMap` property in `PlayerInternalData` stores model-specific data.
 
 ### Player data component
+
