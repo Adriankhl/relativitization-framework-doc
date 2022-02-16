@@ -13,4 +13,4 @@ The general workflow to create agent-based models or alternative game mechanics:
 Now the model should be ready to run, `./simulations/src/main/kotlin/relativitization/game/TypicalGame.kt` is an example
 on how to run a simulation.
 
-See [Object Introduction](./object-introduction.md) for details on how the objects should be defined.
+See [Object introduction](./object-introduction.md) for details on how the objects should be defined.

@@ -3,6 +3,9 @@
 A brief introduction to objects in Relativitization:
 
 1. [Data](#data)
+2. [Mechanism](#mechanism)
+3. [AI](#ai)
+4. [Universe generation](#universe-generation)
 
 ## Data
 
@@ -29,8 +32,13 @@ immutable version, or vice versa. To ensure that the serializer works:
 
 `PlayerData` in `PlayerData.kt` contains the core data of a player, where `MutablePlayerData` is the corresponding
 mutable version. `PlayerData` stores the basic data of a player, such as the position and velocity. Other data is stored
-in `PlayerInternalData`, such as event and hierarchy. The
+in `PlayerInternalData`, such as events and hierarchy of players. The
 `playerDataComponentMap` property in `PlayerInternalData` stores model-specific data.
 
 ### Player data component
 
+## Mechanism
+
+## AI
+
+## Universe generation
