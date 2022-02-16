@@ -1,4 +1,6 @@
-# Framework introduction
+# Object introduction
+
+A brief introduction to objects in Relativitization:
 
 1. [Data](#data)
 

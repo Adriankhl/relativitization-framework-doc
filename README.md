@@ -6,7 +6,7 @@ on [Relativitization](https://github.com/Adriankhl/relativitization).
 ## Table of contents
 
 * [Theoretical basis](./papers/on-social-simulation-in-4D-relativistic-spacetime/pdf/paper.pdf)
-* [Framework introduction](./guide/framework-introduction.md)
+* [Object introduction](./guide/object-introduction.md)
 
 ## Contribute
 
