@@ -46,6 +46,17 @@ serialization name to the data component.
 
 ### Global data
 
+`UniverseGlobalData` in `global/UniverseGlobalData.kt` stores the global data of the universe.
+
+### Global data component
+
+A global data component should inherit `GlobalDataComponent` in `global/components/GlobalDataComponent.kt`, the mutable
+counterpart should inherit `MutableGlobalDataComponent`, `@SerialName` annotation should be used to unify the
+serialization name for both versions of the class.
+
+`GlobalDataComponentMap` in `global/components/GlobalDataComponent.kt` store `PlayerDataComponent` as a map from the
+serialization name to the data component.
+
 ## Mechanism
 
 ## AI
