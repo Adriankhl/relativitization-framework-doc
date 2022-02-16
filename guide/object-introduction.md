@@ -37,6 +37,15 @@ in `PlayerInternalData`, such as events and hierarchy of players. The
 
 ### Player data component
 
+A player data component should inherit `PlayerDataComponent` in `components/PlayerDataComponent.kt`, the mutable
+counterpart should inherit `MutablePlayerDataComponent`, `@SerialName` annotation should be used to unify the
+serialization name for both versions of the class.
+
+`PlayerDataComponentMap` in `components/PlayerDataComponent.kt` store `PlayerDataComponent` as a map from the
+serialization name to the data component.
+
+### Global data
+
 ## Mechanism
 
 ## AI
