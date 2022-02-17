@@ -121,9 +121,35 @@ that this is the root directory in this section.
 AI determines the list of commands from a player, the commands will self-execute on the sender and execute on the target
 receiver. An AI should be an object inheriting `AI` in `AI.kt`.
 
-### AI name
-
 `PlayerInternalData` in [player data](#player-data) stores a property called `aiName`, it determines which AI the player
 will be using to compute the list of commands each turn.
 
 ## Universe generation
+
+Universe-generation-related code should be located
+in `relativitization/universe/src/main/kotlin/relativitization/universe/generate/method`. Assume that this is the root
+directory in this section.
+
+### Method category: abm, random, testing
+
+To clarify the usage of the generation methods, they are divied into three categories:
+
+1. `ABMGenerateUniverseMethod` in `abm/ABMGenerateUniverseMethod.kt`
+2. `RandomGenerateUniverseMethod` in `random/RandomGenerateUniverseMethod.kt`
+3. `TestingGenerateUniverseMethod` in `testing/TestingGenerateUniverseMethod.it`
+
+They have exactly the same functionality. Pick one of them to inherit and create an object to generate universe for your
+model.
+
+### Things to consider
+
+Make sure the universe generated is valid:
+
+* Has a valid `UniverseSettings`
+* Has a valid `UniverseState`
+* Include the player data component needed in `PlayerDataComponentMap`
+* Include the global data component needed in `GlobalDataComponentMap`
+* Pick the `aiName` of player
+* Specify the name of the desired `CommandAvailability` in `commandCollectionName` of `UniverseSettings`
+* Specify the name of the desired `MechanismLists` in `mechanismCollectionName` of `UniverseSettings`
+* Specify the name of the desired `GlobalMechanismList` in `globalMechanismCollectionName` of `UniverseSettings`
