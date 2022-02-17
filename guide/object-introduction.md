@@ -4,8 +4,9 @@ A brief introduction to objects in Relativitization:
 
 1. [Data](#data)
 2. [Mechanism](#mechanism)
-3. [AI](#ai)
-4. [Universe generation](#universe-generation)
+3. [Global mechanism](#global-mechanism)
+4. [AI](#ai)
+5. [Universe generation](#universe-generation)
 
 ## Data
 
@@ -74,6 +75,25 @@ you have to create an object to inherit `CommandAvailability` in `commands/Comma
 commands and the names of available events to be added by the `AddEventCommand` in `commands/DefaultEventCommands.kt`.
 
 ## Mechanism
+
+Mechanism-related code should be located
+in `relativitization/universe/src/main/kotlin/relativitization/universe/mechanisms`. Assume that this is the root
+directory in this section.
+
+### Mechanism process
+
+Mechanism determines how the data of players should be modified. A mechanism should be an object inheriting
+`Mechanism` in `Mechanism.kt`. The `process` function modifies the player data and generate a list of commands to send
+from the player.
+
+### Mechanism lists: regular vs dilated
+
+Mechanisms can be shared among different models. To specify the mechanisms to be processed in a model, you have to 
+create an object to inherit `MechanismLists` in `Mechanism.kt`. It stores a list of regular mechanism and a list of
+dilated mechanism to be processed in the model. Regular mechanisms are executed once per turn, where dilated mechanisms
+is affected by time dilation and they should be executed once per time in average.
+
+## Global mechanism
 
 ## AI
 
