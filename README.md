@@ -3,8 +3,8 @@
 Work-in-progress programming and modeling documentation
 on [Relativitization](https://github.com/Adriankhl/relativitization).
 
-Relativitization is written in [Kotlin](https://kotlinlang.org/). See [Kotlin docs](https://kotlinlang.org/docs) if you
-are not familiar with Kotlin.
+Relativitization is written in [Kotlin](https://kotlinlang.org/). See
+the [official Kotlin docs](https://kotlinlang.org/docs) if you are not familiar with the language.
 
 ## Table of contents
 
