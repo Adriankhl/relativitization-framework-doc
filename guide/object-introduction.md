@@ -41,7 +41,7 @@ A player data component should inherit `PlayerDataComponent` in `components/Play
 counterpart should inherit `MutablePlayerDataComponent`, `@SerialName` annotation should be used to unify the
 serialization name for both versions of the class.
 
-`PlayerDataComponentMap` in `components/PlayerDataComponent.kt` store `PlayerDataComponent` as a map from the
+`PlayerDataComponentMap` in `components/PlayerDataComponent.kt` stores `PlayerDataComponent` as a map from the
 serialization name to the data component.
 
 ### Global data
@@ -54,8 +54,24 @@ A global data component should inherit `GlobalDataComponent` in `global/componen
 counterpart should inherit `MutableGlobalDataComponent`, `@SerialName` annotation should be used to unify the
 serialization name for both versions of the class.
 
-`GlobalDataComponentMap` in `global/components/GlobalDataComponent.kt` store `PlayerDataComponent` as a map from the
+`GlobalDataComponentMap` in `global/components/GlobalDataComponent.kt` stores `PlayerDataComponent` as a map from the
 serialization name to the data component.
+
+### Command
+
+Whenever a player wants to interact with another player, it is mediated by commands. A command should inherit `Command`
+in `commands/Command.kt`.
+
+### Event
+
+An event of a player generates commands based on the choice of the player or the default choice. An event should inherit
+`Event` in `events/Event.kt`.
+
+### Command availability
+
+Commands and events can be shared among different models. To explicitly constrain the available commands for a model,
+you have to create an object to inherit `CommandAvailability` in `commands/Command.kt`. It stores the names of available
+commands and the names of available events to be added by the `AddEventCommand` in `commands/DefaultEventCommands.kt`.
 
 ## Mechanism
 

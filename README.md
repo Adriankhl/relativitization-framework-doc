@@ -3,6 +3,9 @@
 Work-in-progress programming and modeling documentation
 on [Relativitization](https://github.com/Adriankhl/relativitization).
 
+Relativitization is written in [Kotlin](https://kotlinlang.org/). See [Kotlin docs](https://kotlinlang.org/docs) if you
+are not familiar with Kotlin.
+
 ## Table of contents
 
 * [Theoretical basis](./papers/on-social-simulation-in-4D-relativistic-spacetime/pdf/paper.pdf)
