@@ -113,4 +113,17 @@ to be processed once per turn in the model.
 
 ## AI
 
+AI-related code should be located in `relativitization/universe/src/main/kotlin/relativitization/universe/ai`. Assume
+that this is the root directory in this section.
+
+### AI computation
+
+AI determines the list of commands from a player, the commands will self-execute on the sender and execute on the target
+receiver. An AI should be an object inheriting `AI` in `AI.kt`.
+
+### AI name
+
+`PlayerInternalData` in [player data](#player-data) stores a property called `aiName`, it determines which AI the player
+will be using to compute the list of commands each turn.
+
 ## Universe generation
