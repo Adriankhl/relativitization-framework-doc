@@ -88,12 +88,28 @@ from the player.
 
 ### Mechanism lists: regular vs dilated
 
-Mechanisms can be shared among different models. To specify the mechanisms to be processed in a model, you have to 
+Mechanisms can be shared among different models. To specify the mechanisms to be processed in a model, you have to
 create an object to inherit `MechanismLists` in `Mechanism.kt`. It stores a list of regular mechanism and a list of
 dilated mechanism to be processed in the model. Regular mechanisms are executed once per turn, where dilated mechanisms
 is affected by time dilation and they should be executed once per time in average.
 
 ## Global mechanism
+
+Global-mechanism-related code should be located
+in `relativitization/universe/src/main/kotlin/relativitization/universe/global`. Assume that this is the root directory
+in this section.
+
+### Update universe global data
+
+Global mechanism determines how the universe global data should be modified. Be aware that this may break the
+information speed constraint imposed by special relativity if not carefully implemented. A global mechanism should be an
+object inheriting `GlobalMechanism` in `GlobalMechanism.kt`. The `updateGlobalData` function modifies the global data.
+
+### Global mechanism list
+
+Global mechanisms can be shared among different models. To specify the global mechanisms to be processed in a model, you
+have to create an object to inherit `GlobalMechanismList` in `GlobalMechanism.kt`. It stores a list of global mechanism
+to be processed once per turn in the model.
 
 ## AI
 
