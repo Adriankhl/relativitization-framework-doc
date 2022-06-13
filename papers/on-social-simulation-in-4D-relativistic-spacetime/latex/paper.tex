@@ -1,158 +1,124 @@
-% arara: pdflatex
+% arara: lualatex
 % arara: biber
-% arara: pdflatex
+% arara: lualatex
 % arara: clean: { extensions: [ acn,acr,alg,aux,bcf,blg,glg,glo,gls,idx,ilg,ind,ist,log,lof,lol,lot,out,ptc,toc,run.xml ]}
 
-\documentclass{article}
+%%%%%%%%%%%%%%%%%%%% author.tex %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% sample root file for your "contribution" to a proceedings volume
+%
+% Use this file as a template for your own input.
+%
+%%%%%%%%%%%%%%%% Springer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage{arxiv}
 
-\usepackage[utf8]{inputenc} % allow utf-8 input
-\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
-\usepackage{hyperref}       % hyperlinks
-\usepackage{url}            % simple URL typesetting
-\usepackage{booktabs}       % professional-quality tables
-\usepackage{amsfonts}       % blackboard math symbols
-\usepackage{nicefrac}       % compact symbols for 1/2, etc.
-\usepackage{microtype}      % microtypography
+\documentclass{svproc}
+%
+% RECOMMENDED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+
+% to typeset URLs, URIs, and DOIs
+\usepackage{url}
+\def\UrlFont{\rmfamily}
+
+\usepackage[hidelinks]{hyperref}
+
 \usepackage{amsmath}
-\usepackage{cleveref}       % smart cross-referencing
-\usepackage{lipsum}         % Can be removed after putting your text content
-\usepackage{graphicx}
-%\usepackage[square,sort,comma,numbers]{natbib}
-%\usepackage{natbib}
-\usepackage{doi}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
 
-\usepackage[sorting=none]{biblatex}
+\usepackage[linesnumbered,ruled]{algorithm2e}
+
+% Prevent if-clause, foreach-clause, etc. in algorithm become italic
+\SetArgSty{textnormal}
+
+\SetKwInput{KwInput}{Input}                % Set the Input
+\SetKwInput{KwOutput}{Output}              % set the Output
+
+\usepackage[style=nature]{biblatex}
 \bibliography{references.bib}
 
-\algblock{Input}{EndInput}
-\algnotext{EndInput}
-\algblock{Output}{EndOutput}
-\algnotext{EndOutput}
-\algblock{Data}{EndData}
-\algnotext{EndData}
-\newcommand{\Desc}[2]{\State \makebox[2em][l]{#1}#2}
-\title{On social simulation in 4D relativistic spacetime}
-
-% Here you can change the date presented in the paper title
-%\date{September 9, 1985}
-% Or remove it
-%\date{}
-
-\author{
-	Lai Kwun Hang \\
-	Centre for Science and Technology Studies (CWTS) \\
-	Leiden University \\
-	\texttt{k.h.lai@cwts.leidenuniv.nl} \\
-	%% examples of more authors
-	%\And
-	%\href{https://orcid.org/0000-0000-0000-0000}{\includegraphics[scale=0.06]{orcid.pdf}\hspace{1mm}Elias D.~Striatum} \\
-	%Department of Electrical Engineering\\
-	%Mount-Sheikh University\\
-	%Santa Narimana, Levand \\
-	%\texttt{stariate@ee.mount-sheikh.edu} \\
-	%% \AND
-	%% Coauthor \\
-	%% Affiliation \\
-	%% Address \\
-	%% \texttt{email} \\
-	%% \And
-	%% Coauthor \\
-	%% Affiliation \\
-	%% Address \\
-	%% \texttt{email} \\
-	%% \And
-	%% Coauthor \\
-	%% Affiliation \\
-	%% Address \\
-	%% \texttt{email} \\
-}
-
-% Uncomment to override  the `A preprint' in the header
-%\renewcommand{\headeright}{Technical Report}
-%\renewcommand{\undertitle}{Technical Report}
-\renewcommand{\shorttitle}{\textit{arXiv} Template}
-
-%%% Add PDF metadata to help others organize their library
-%%% Once the PDF is generated, you can check the metadata with
-%%% $ pdfinfo template.pdf
-\hypersetup{
-pdftitle={On social simulation in 4D relativistic spacetime},
-%pdfsubject={q-bio.NC, q-bio.QM},
-pdfauthor={Lai Kwun Hang},
-%pdfkeywords={First keyword, Second keyword, More},
-}
-
 \begin{document}
-\maketitle
+\mainmatter              % start of a contribution
+%
+\title{On social simulation in 4D relativistic spacetime}
+%
+\titlerunning{On social simulation in 4D relativistic spacetime}  % abbreviated title (for running head)
+%                                     also used for the TOC unless
+%                                     \toctitle is used
+%
+\author{Lai Kwun Hang}
+%
+\authorrunning{Lai Kwun Hang} % abbreviated author list (for running head)
+%
+%%%% list of authors for the TOC (use if author list has to be modified)
+%\tocauthor{Ivar Ekeland, Roger Temam, Jeffrey Dean, David Grove,
+%Craig Chambers, Kim B. Bruce, and Elisa Bertino}
+%
+\institute{Centre for Science and Technology Studies (CWTS), Leiden University,\\
+\email{k.h.lai@cwts.leidenuniv.nl}
+}
+
+\maketitle              % typeset the title of the contribution
 
 \begin{abstract}
-Agent-based models (ABM) and simulations are becoming more prominent in social science.
-A major advantage of ABM is that it allows social scientists to explore hypothetical scenarios.
-If we stretch our imagination, one of the interesting social science scenarios would be our interstellar future.
-However, modeling an interstellar society requires relativistic physics,
+Agent-based modeling (ABM) and simulation allow us to study social phenomena in hypothetical scenarios.
+If we stretch our imagination, one of the interesting scenarios would be our interstellar future.
+To model an interstellar society, we need to consider relativistic physics,
 which is not straightforward to implement in existing ABM frameworks.
 In this paper, we present the mathematics and algorithmic details needed for simulating ABM in 4D relativistic spacetime.
 These algorithms form the basis of our open-source computational framework, ``Relativitization''~\cite{relativitization}.
+% We would like to encourage you to list your keywords within
+% the abstract section using the \keywords{...} command.
+\keywords{special relativity, interstellar society, agent-based simulation, computational framework}
 \end{abstract}
 
-
-% keywords can be removed
-\keywords{Special relativity \and Agent-based model \and Software framework}
-
-
 \section{Introduction}
-An agent-based model (ABM) is a simulation model bridging microscopic behaviours of agents and macroscopic observations.
-Depending on the context of the model, an agent can be an individual, an organization, or as big as a country.
-Assumption about the social behaviours of the agents are made, then the agents are placed and evolved
-in a computational environment.
-Modeling computational agents enforces social scientists to make explicit assumptions,
-which helps formalizing the discussion on mechanisms and phenomena in the society.
-
-In some research projects, if data collection is viable, 
-ABM can be used to explain and predict the data.
-In many other cases, it is not practical to expect model calibration with data,
-where ABM can still be used for illustration and theoretical exposition in these cases~\cite{edmonds2015simulating}.
-In this paper, we are interested in modeling interstellar society, and it certainly belongs to the latter category.
-
 The scientific and technological advancement in the last century greatly increases our understanding of the universe.
-Nowadays, we are able to build giant telescope and observe astronomical objects billions of light years away.
-Apart from deeping our scientific understanding, the astronomical knowledge also stimulate our imagination
+Nowadays, we are able to build giant telescopes and observe astronomical objects billions of light years away.
+Apart from deepening our scientific understanding, our astronomical knowledge also stimulates our imagination
 of interstellar civilizations.
-A lot of great science fictions have been written, and scientists proposed ideas like 
-Fermi paradox~\cite{gray2015fermi}, Dyson sphere~\cite{wright2020dyson} and Kardashev scale~\cite{gray2020extended}.
-While many of the ideas are physically plausible, 
-it would be interesting to discuss about these ideas in the context of social science.
+A lot of great science fiction has been written, and scientists have proposed ideas like 
+the Fermi paradox~\cite{gray2015fermi}, the Dyson sphere~\cite{wright2020dyson} and the Kardashev scale~\cite{gray2020extended}.
+While many of these ideas are physically plausible, 
+it would be interesting to discuss these ideas from a social science perspective.
 Due to the highly hypothetical nature of the problem,
-we suggested that ABM can be used to generate formal academic discussion on interstellar society.
+we suggest that agent-based model (ABM) enables formal academic discussion on interstellar society.
 
-To model agents in an interstellar space, supposed we only consider a scale with normal stellar objects
-where we can ignore the effects of general relativity, such as universe expansion and black holes,
-we still have to consider the effect of special relativity.
-In the context of ABM, where we the simulation is computed under a single inertial frame,
+An ABM is a simulation model bridging microscopic behaviours of agents and macroscopic observations.
+Depending on the context of the model, an agent can be an individual, an organization, or even a country.
+First, assumption about the social behaviours of the agents are made, then the agents are placed and evolved
+in a computational environment.
+For a research problem for which it is not viable to perform data collection and analysis,
+ABM can still be used for theoretical exposition~\cite{edmonds2015simulating}.
+
+To model agents in interstellar space, suppose we only consider a scale with normal stellar objects
+so that we can ignore the effects of general relativity, such as universe expansion and black holes,
+but we still have to consider the effect of special relativity.
+In the context of ABM, where the simulation is computed under a set of inertial frames that are at rest to each other,
 we can simplify the theory of relativity into two core
 phenomena: speed of light as the upper bound of the speed of information travel, and
 time dilation relative to any stationary observer in the inertial frames.
-This also implies that we have to take care of four dimensions: three space dimension, plus one time dimensions.
+This also implies that we have to take care of four dimensions: three space dimensions, plus one time dimension.
 
-Typically, an ABM is constructed on top of an ABM framework to facilitate model development and communication.
-There are a lot existing ABM framework, to name a few, NetLogo~\cite{netlogo}, mesa~\cite{python-mesa-2020},
+Typically, an ABM is constructed using an ABM framework to facilitate model development and communication.
+There are a lot of existing ABM frameworks, to name a few, NetLogo~\cite{netlogo}, mesa~\cite{python-mesa-2020},
 and Agents.jl~\cite{Agents2021}, see~\cite{pal2020review} for a detailed review.
-While it is possible to build a 4D relativistic model in some existing ABM frameworks, it is not easy to
-enforce the relativistic effect, and it can be error-prone.
+While it is possible to build a 4D relativistic model in some existing ABM frameworks, 
+those frameworks do not have native support for the necessary 4D data structures,
+and it can be error-prone to enforce relativistic effects via custom implementations of data structures and algorithms.
 Therefore, we have developed a simulation framework we call ``Relativitization''~\cite{relativitization},
-to help social scientists to build their ABM in relativistic spacetime.
-In this paper, the mathematics and the algorithms under the framework will be presented.
+to help social scientists to build an ABM in relativistic spacetime.
+In this paper, the mathematics and the algorithms underlying the framework will be presented.
 
 \section{Definitions}
 
 In Relativitization, an agent is called a ``player''.
-Players live in a universe, and all the computation is done according to an inertial frame of the universe.
+Players live in a universe.
+Ideally, computation should be done in every local frame following all players, 
+and the computation results can be synchronized by a Lorentz transformation.
+However, this will make the framework and the model substantially more complex.
+Therefore, all computations are done according to some inertial frames that are at rest to each other.
 The spatial coordinates of a player are represented by floating-point numbers $x$, $y$ and $z$
-where the time coordinate of the player is represented by a floating-point number $t$.
+and the time coordinate of a player is represented by a floating-point number $t$.
 To simplify computation and visualization, the universe is partitioned into unit cubes.
 A player with floating-point coordinates $(t, x, y, z)$ is located at the cube 
 with integer coordinates $T = \lfloor t \rfloor$, $X = \lfloor x \rfloor$, $Y = \lfloor y \rfloor$, $Z = \lfloor z \rfloor$,
@@ -168,10 +134,10 @@ The spacetime interval between coordinates $\textbf{s}_i$ and $\textbf{s}_j$ is
     \|\textbf{s}_i - \textbf{s}_j\| = c^2 (t_i - t_j)^2 - (x_i - x_j)^2 - (y_i - y_j)^2 - (z_i - z_j)^2.
 \end{equation}
 
-If $\|\textbf{s}_i - \textbf{s}_j\| < 0$, it is called a spacelike interval, and events happen at the two coordinates
+If $\|\textbf{s}_i - \textbf{s}_j\| < 0$, it is called a spacelike interval, and events that happen at the two coordinates
 are not causally connected because no information can travel faster than the speed of light $c$.
 
-It is often needed to compute the interval in integer coordinates.
+It is often needed to compute intervals in integer coordinates.
 We define the spatial distance between $\overrightarrow{U_i}$
 and $\overrightarrow{U_j}$ as the maximum distance between all points in the cubes at 
 $\overrightarrow{U_i}$ and $\overrightarrow{U_j}$
@@ -179,35 +145,35 @@ $\overrightarrow{U_i}$ and $\overrightarrow{U_j}$
     |\overrightarrow{U_i} - \overrightarrow{U_j}| = (X_i - X_j + 1)^2 + (Y_i - Y_j + 1)^2 + (Z_i - Z_j + 1)^2.
 \end{equation}
 
-Suppose there is a signal sent from $\overrightarrow{U_i}$ to $\overrightarrow{U_j}$, 
-to ensure that the information travels slower than the speed of light, 
-the integer time delay $td(\overrightarrow{U_i}, \overrightarrow{U_j})$ is computed as
+Suppose there is a signal sent from $\overrightarrow{U_i}$ to $\overrightarrow{U_j}$.
+To ensure that the information travels slower than the speed of light, 
+the integer time delay $\tau(\overrightarrow{U_i}, \overrightarrow{U_j})$ is computed as
 \begin{equation} 
-    td(\overrightarrow{U_i}, \overrightarrow{U_j}) = \left \lceil \frac{|\overrightarrow{U_i} - \overrightarrow{U_j}|}{c} \right \rceil.
+    \tau(\overrightarrow{U_i}, \overrightarrow{U_j}) = \left \lceil \frac{|\overrightarrow{U_i} - \overrightarrow{U_j}|}{c} \right \rceil.
 \end{equation}
 
 \subsection{Group id}
 
-From Eq.\ref{eq:delay}, even if $\overrightarrow{U_i} = \overrightarrow{U_j}$, the time delay is non-zero.
-However, when two players are really closed to each other, the time delay between the players should be zero.
+From Eq.~\ref{eq:delay}, even if $\overrightarrow{U_i} = \overrightarrow{U_j}$, the time delay is non-zero.
+To implement zero time delay for players that are really close to each other, 
+we divide a unit cube into several sub-cubes with edge length $d_e$, 
+and information travel within the same sub-cubes is instantaneous.
 
-To allow zero time delay, we define a group id $g(\overrightarrow{u}, \overrightarrow{U})$ of a player as
-
-\begin{align*}
-    n_e &= \left \lceil \frac{1}{d_e} \right \rceil, \\
-    n_x &= \left \lfloor \frac{x - X} {d_e} \right \rfloor, \\
-    n_y &= \left \lfloor \frac{y - Y} {d_e} \right \rfloor, \\
-    n_z &= \left \lfloor \frac{z - Z} {d_e} \right \rfloor,
-\end{align*}
-
+To improve the computational speed when checking whether two players belong to the same sub-cube,
+we assign a ``group id'' to each sub-cube in a unit cube.
+A unit cube has $n_e^3$ sub-cubes, where $n_e = \left \lceil \frac{1}{d_e} \right \rceil$.
+For a player at $\overrightarrow{u}$, it belongs to the $(n_x, n_y, n_z)$ sub-cubes,
+where $n_x = \left \lfloor \frac{x - X} {d_e} \right \rfloor$,
+$n_y = \left \lfloor \frac{y - Y} {d_e} \right \rfloor$,
+and $n_z = \left \lfloor \frac{z - Z} {d_e} \right \rfloor$.
+The group id $g(\overrightarrow{u}, \overrightarrow{U})$ of the player
+can be computed as
 \begin{equation} \label{eq:group}
-    g(\overrightarrow{u}, \overrightarrow{U}) = n_x n_e^2 + n_y n_e + n_z,
+    g(\overrightarrow{u}, \overrightarrow{U}) = n_x n_e^2 + n_y n_e + n_z.
 \end{equation}
-where $d_e$ is the edge length of a smaller cube inside the unit cube.
 
-If two players have same integer coordinates and same group id,
-they are both located in a smaller cube defined by $d_e$, 
-and we say the players belong the same group and the time delays between the players are zero.
+If two players have the same integer coordinates and the same group id,
+then we say the players belong the same group and the time delays between the players are zero.
 
 \subsection{Player data}
 
@@ -215,10 +181,10 @@ A player is characterized by a set of data:
 \begin{itemize}
   \item player id $i$,
   \item integer coordinates $(T_i, X_i, Y_i, Z_i)$,
-  \item a historical record of integer coordinates $H_i = \{(T_i', X_i', Y_i', Z_i'), T_i' < T_i \}$,
+  \item a historical record of integer coordinates $H_i = \{(T_i', X_i', Y_i', Z_i') \mid T_i' < T_i \}$,
   \item floating-point coordinates $(t_i, x_i, y_i, z_i)$,
-  \item dilated time residue $r_i$, a floating point variable to store the effect of time dilation,
-  \item dilation action $b_{ri}$ is a boolean variable to determine the impact of time dilation,
+  \item time dilation counter $\mu_i$, 
+        a floating point number to keep track of time dilation (see Sec.~\ref{ssec:mechanism_and_ai} and Sec.~\ref{ssec:mechanisms}),
   \item group id $g_i$,
   \item floating-point velocities $\overrightarrow{v_i} = (v_{ix}, v_{iy}, v_{iz})$,
   \item other data $D_i$ relevant to the model.
@@ -226,343 +192,280 @@ A player is characterized by a set of data:
 
 \subsection{Command}
 
-Interaction in ABM is often presented as one player asking
-another player to do something.
+In other frameworks, interactions in ABMs are often presented as one player asking another player to do something.
 Because the speed of information travel is bounded by $c$,
 a player cannot simply ask other players to do something immediately.
 Instead, interactions are mediated by commands.
 Whenever player $i$ wants to interact with player $j$, 
-player $i$ send a command to $j$. 
+player $i$ sends a command to $j$. 
 
 A command is characterized by:
 \begin{itemize}
   \item $i_{\textrm{to}}$, the id of the player to receive this command,
   \item $i_{\textrm{from}}$ the id of the target player who sent this command,
-  \item $\textbf{s}_{\textrm{from}}$ the coordinates when the player sent this command,
-  \item $f_{\text{self}}$ a function to modify data of the sender when this is sent,
+  \item $\textbf{S}_{\textrm{from}}$ the integer coordinates when the player sent this command,
   \item $f_{\text{target}}$ a function to modify data of the target player when this is received.
 \end{itemize}
 
 Commands travel at the speed of light $c$.
-The amount of time needed for a command to reach the target depends on the 
-trajectory of the target player $i_{\textrm{to}}$ and the sender coordinates $\textbf{s}_{\textrm{from}}$,
+The amount of time needed for a command to reach the target, 
+measured in the inertial frames we used in the simulation,
+depends on the trajectory of the target player $i_{\textrm{to}}$ and the sender coordinates $\textbf{S}_{\textrm{from}}$,
 
 \subsection{Universe data}
 
-Universe is a simulation model which aggregates all necessary data and functionalities.
+Universe is an overarching structure which aggregates all necessary data and functionalities.
 An universe has:
 \begin{itemize}
   \item a current universe time $T_{\textrm{current}}$,
-  \item a 4-dimension array of player data list $L_{TXYZ}$, player data that belongs to
-        $(T, X, Y, Z)$ should be stored at the corresponding list,
-  \item a map from player id to command $M_c$, storing lists of commands sending to players,
+  \item a 4-dimension array of lists of player data $L_{TXYZ}$,
+        so that the data of a player residing at $(T, X, Y, Z)$ is stored in the associated list, 
+        the ``afterimages'' of players are also stored in the corresponding list (Sec~\ref{ssec:move}),
+  \item a map $M_{\textrm{command}}$ from player id to a list of command,
+        such that a command in the list will be executed when the player receive the command,
   \item other universe global data $D_G$ relevant to the model,
-  \item an AI function $f_{\textrm{AI}}$, given an environment observed by a player, the function
-        determine the commands sent from the player at every turn,
-  \item a regular mechanism function $f_{\textrm{rm}}$, to modify the player data and generate commands 
-        at every turn,
-  \item a dilated mechanism function $f_{\textrm{dm}}$, to modify the player data and generate commands 
-        at turns that are not affected by time dilation,
-  \item a global mechanism function $f_{\textrm{gm}}$, to modify the global data.
 \end{itemize}
 
-The AI function $f_{\textrm{AI}}$ and the regular mechanism function $f_{\textrm{rm}}$ have similar
-functionalities. 
-In fact, it is possible to ignore either $f_{\textrm{AI}}$ or $f_{\textrm{rm}}$
-in many simple models.
-The major difference between the two is that AI function is more restricted, i.e., 
-it can only modify its own player data through commands, 
-where the regular mechanism function can do whatever it wants to modify the player data.
-In a more complex model, it is clearer to separate the cognitive decision of a player ($f_{\textrm{AI}}$)
-and the passive process from mechanisms ($f_{\textrm{rm}}$ and $f_{\textrm{dm}}$).
+\subsection{Mechanism and AI} \label{ssec:mechanism_and_ai}
 
-\subsection{3D view} \label{ssec:view}
+Given an instance of a universe, 
+the dynamics of players are based on predefined rules and the state of the universe observed by the players.
+In our framework, we call the rules mechanisms.
+A mechanism takes the state of the universe observed by a player,
+modifies the state of a player,
+and generates a list of commands to send to other players.
 
-At any moment, a player can only observe a 3D slice of the universe instead of viewing the full 4D array $L_{TXYZ}$, 
-Denote $V_i$ as the 3D view of the universe from the viewpoint of player $i$, 
-where the player's time is equal to the current universe time $T_i = T_{\textrm{current}}$.
-$V_i$ is characterized by:
-\begin{itemize}
-  \item a map from player id to player data, these are the player data in the universe that player $i$ should see,
-  \item the part of the universe global data $D_G$ that should be exposed to players.
-\end{itemize}
-
-Computation of $V_i$ can be decomposed into 2 stages. 
-Firstly, if we ignore the fact that the time delay between players with the same group id and same integer coordinates is zero,
-all players in a cube share the same 3D view of the universe. 
-Algorithm~\ref{alg:viewAtCube} compute the shared 3D view at the coordinates $(T_i, X_i, Y_i, Z_i)$.
-Then, $V_i$ can be computed from the shared 3D view by Algorithm~\ref{alg:viewAtPlayer}.
-In fact, all players in the cube with the same group id has exactly the same 3D view.
-
-\begin{algorithm}
-\caption{Algorithm to compute a map of player id to player data viewed from the coordinates $(T_i, X_i, Y_i, Z_i)$}
-\label{alg:viewAtCube}
-\begin{algorithmic}[1]
-  \Input
-    \Desc{$T_i, X_i, Y_i, Z_i$ position of the viewing location}
-    \Desc{$L_{TXYZ}$ 4D array of player data list}
-  \EndInput
-  \Output
-    \Desc{Map from player id to player data}
-  \EndOutput
-  \Data
-    \Desc{M}{map from player id to player data}
-  \EndData
-  \ForAll{$X_j, Y_j, Z_j$}
-    \State $T_j \gets T_i - td(\overrightarrow{U_i}, (X_j, Y_j, Z_j))$ 
-    \ForAll{data of player $k$ in $L_{T_j X_j Y_j Z_j}$}
-      \If{$M$ has key $k$}
-        \If{$T$ of $M[k]$ < $T_k$}
-          \State Replace data of player $k$ in $M[k]$
-        \EndIf
-      \Else
-        \State Store data of player $k$ to $M[k]$
-      \EndIf
-    \EndFor
-  \EndFor
-  \State \Return $M$
-\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}
-\caption{Algorithm to compute view $V_i$ of player $i$}
-\label{alg:viewAtPlayer}
-\begin{algorithmic}[1]
-  \Input
-    \Desc{$i$ the id of the target player}
-    \Desc{$L_{TXYZ}$ 4D array of player data list}
-  \EndInput
-  \Output
-    \Desc{$V_i$}{3D view of player $i$}
-  \EndOutput
-  \Data
-    \Desc{$M$}{map from player id to player data}
-  \EndData
-  \State Compute $M$ by Algorithm~\ref{alg:viewAtCube}
-  \ForAll{player data in $L_{T_i X_i Y_i Z_i}$}
-    \If{same group id as player $i$}
-      \If{$M$ has key $k$}
-        \If{$T$ of $M[k]$ < $T_k$}
-          \State Replace data of player $k$ in $M[k]$
-        \EndIf
-     \Else
-       \State Store data of player $k$ to $M[k]$
-     \EndIf
-   \EndIf
-  \EndFor
-  \State Construct $V_i$ from $M$ and the relevant part of $D_G$
-  \State \Return $V_i$
-\end{algorithmic}
-\end{algorithm}
+To ease the model development to account for the time dilation effect, 
+we further divide mechanisms into two categories: regular mechanisms and dilated mechanisms. 
+A regular mechanism is executed once per turn, 
+while a dilated mechanism is executed once per multiple turns, 
+adjusted for the time dilation of the player measured in the inertial frames we used in the simulation.
 
 \section{Simulation step} \label{sec:simulation}
 
-Supposed we have defined an universe model, a complete step in a simulation looks like:
+The following are needed to define a model:
+\begin{itemize}
+  \item the data structure of other player data $D_i$,
+  \item the data structure of other universe global data $D_G$,
+  \item a set of available commands,
+  \item a function to initialize the universe data,
+  \item a function to update the universe global data,
+  \item a set of regular and dilated mechanisms,
+\end{itemize}
+
+Along with the universe data,
+it is useful to define a map $M_{\textrm{current}}$ from a player id to the current player data, 
+i.e., $T_i = T_{\textrm{current}}$,
+as an internal object of the simulation.
+The modifications of player data are first performed on $M_\textrm{current}$, 
+and then synchronized back to the universe data at appropriate timing.
+
+Suppose we have initialized an universe model and $M_\textrm{current}$, a complete step in a simulation involves:
 \begin{enumerate}
   \item update the global data (Sec.~\ref{ssec:global}),
   \item compute time dilation effects for all players (Sec.~\ref{ssec:dilation}),
-  \item process mechanisms for each player (Sec.~\ref{ssec:mechanisms},
+  \item process mechanisms for each player (Sec.~\ref{ssec:mechanisms}),
   \item process the command map (Sec.~\ref{ssec:command}),
-  \item compute and process AI inputs (Sec.~\ref{ssec:ai}),
   \item move players, add afterimages, and update time (Sec.~\ref{ssec:move}).
 \end{enumerate}
 
-The simulation can be ran for a fixed amount of steps, or stop until a stopping condition is matched.
+The simulation can be ran for a fixed amount of steps, or stop when a stopping condition is met.
 
 \subsection{Update global data} \label{ssec:global}
 
-The universe global data $D_G$ can be separated into 4 parts:
-\begin{itemize}
-  \item immutable, not observable by players: such as data saved directory,
-  \item immutable, observable by players: such as the dimension of the universe,
-  \item mutable, not observable by players: such as statistics of the model,
-  \item mutable, observable by players: such as variables in some of the mechanisms.
-\end{itemize}
-
-Immutable data does not need to be updated.
-Mutable data that is not observable by players can be updated without any restriction.
-The only part where we need to pay extra attention to is the mutable data that is observable by players.
-If $f_{\textrm{gm}}$ depends on some player data to update the global data, 
+A model may rely on a mutable global data $D_G$ to implement the dynamics.
+If the model depends on some player data to update $D_G$, 
 and the effect is observable by players,
 we need to ensure that no information is transferred faster than the speed of light via
 the global data update.
 
-For example, if $f_{\textrm{gm}}$ updates a data if ``all'' player data satisfy a condition,
-we have to be careful about what do we mean by ``all'' here.
-In the universe, the maximum time delay equals $td_{\textrm{max}} = td((0, 0, 0), (max(X), max(Y), max(Z)))$.
-To fulfill the speed of light requirement, $f_{\textrm{gm}}$ has to check whether all player data in
-$L_{TXYZ}$, where $T_{\textrm{current}} - td_{\textrm{max}} \leq T \leq T_{\textrm{current}}$,
+For example, if the global data is modified if ``all'' player data satisfy a condition,
+we have to be careful about what we mean by ``all'' here.
+In the universe, the maximum time delay equals $\tau_{\textrm{max}} = \tau((0, 0, 0), (max(X), max(Y), max(Z)))$.
+To fulfill the speed of light constraint, the update function has to check whether all player data in
+$L_{TXYZ}$, where $T_{\textrm{current}} - \tau_{\textrm{max}} \leq T \leq T_{\textrm{current}}$,
 $0 \leq X \leq max(X)$, $0 \leq Y \leq max(Y)$, and $0 \leq Z \leq max(Z)$,
-satisfy the condition.
+satisfy that condition.
 
 \subsection{Compute time dilation} \label{ssec:dilation}
 
-Relative to a stationary observer $i$ in an inertial frame,
-special relativity predicts that a moving observer $j$ experiences a time dilation effect:
+Relative to a stationary observer $j$ in an inertial frame,
+special relativity predicts that a moving observer $i$ experiences a time dilation effect:
 
 \begin{equation} \label{eq:gamma}
-  \gamma_j = \frac{1}{\sqrt{1 - \frac{v_j^2}{c^2}}},
+  \gamma_i = \frac{1}{\sqrt{1 - \frac{v_i^2}{c^2}}},
 \end{equation}
 
 \begin{equation}
-  \Delta t_j = \frac{1}{\gamma_j} \Delta t_i,
+  \Delta t_i = \frac{\Delta t_j}{\gamma_i},
 \end{equation}
-where $\gamma_j$ is called the Lorentz factor.
+where $\gamma_i$ is called the Lorentz factor.
 
-Ideally, computation should be done in every local frame following all players, 
-and the computation results can be synchronized by Lorentz transformation.
-However, this will make the framework and the model substantially more complex.
-Therefore, all computations in Relativitization are done in a single inertial frame.
-To account for the time-dilation effect, the dilated time residue $r_i$, 
-and the dilation action variable $b_{ri}$ are updated by Algorithm~\ref{alg:dilation}
+To account for the time-dilation effect, 
+the time dilation counter $\mu_i$ is updated by Algorithm~\ref{alg:dilation}
 every turn for every player. 
-$b_{ri}$ will then affect the mechanism processing in Sec.~\ref{ssec:mechanisms}.
+$\mu_{i}$ will then affect the mechanism processing in Sec.~\ref{ssec:mechanisms}.
 
 \begin{algorithm}
-\caption{Algorithm to update time dilation variables}
+\KwInput{$M_\textrm{current}$, map from player id to current player data}
+
+\ForEach{player $i$ in $M_\textrm{current}$}{
+  $\mu_i \gets \mu_i + \sqrt{1 - \frac{v_i^2}{c^2}}$\;
+  \If{$\mu_i \geq 0$} {
+    $\mu_i \gets \mu_i - 1$\;
+  }
+}
+
+\caption{Update time dilation counter.}
 \label{alg:dilation}
-\begin{algorithmic}[1]
-  \Input
-    \Desc{Player data of player $i$}
-  \EndInput
-  \State Compute $\gamma_i$ by Eq.~\ref{eq:gamma}
-  \State $r_i \gets r_i + \frac{1}{\gamma_i}$
-  \If{$r_i \geq 1$}
-    \State $r_i \gets r_i - 1$
-    \State $b_{ri} \gets \textrm{true}$
-  \Else  
-    \State $b_{ri} \gets \textrm{false}$
-  \EndIf
-\end{algorithmic}
 \end{algorithm}
 
 \subsection{Process mechanisms} \label{ssec:mechanisms}
 
-Mechanism is one of the major components of the universe model.
-Given the 3D view $V_i$ of a player $i$, mechanisms describe
-how the data of player $i$ should be updated, and which commands
-should be generated from the process.
-
-Mechanisms are classified into regular mechanism and dilated mechanism,
-where dilated mechanism is affected by time dilation and regular mechanism is not.
-For example, if a player should synchronize an internal state based on the state
-of other player, then this should be a regular mechanism.
-If a player needs to produce an output where the amount is proportional to time,
-then this should be a dilated mechanism.
-
-Since commands generated by mechanism should be executed immediately if the
-time delay between the target and the sender is zero, it is more convenient
-to consider all player data in a cube together in 
-the mechanism processing algorithm, 
-as demonstrated in algorithm.~\ref{alg:mechanisms}.
-The output commands from Algorithm~\ref{alg:mechanisms} are then grouped by id of the target
-player, and added to $M_c$ after randomizing the order of senders
+Before processing any mechanism for a player, 
+we need to compute the state of the universe viewed by the player.
+At an instance in our discretized relativistic universe,
+player $i$ sees other players located at the unit cubes closest
+to the surface of the past light cone of player $i$,
+while the entire cubes are still within the past light cone.
+The computation consists of two steps:
+(1) Algorithm~\ref{alg:viewAtCube} computes the view centered at a specific cube, 
+ignoring the zero time delay when players are within the same group,
+(2) Algorithm~\ref{alg:viewAtGroup} computes the view for players in a group.
+Assuming each line of these algorithms takes $O(1)$ and iterating over all $(X, Y, Z)$,
+the time complexity $O(mn)$ from Algorithm~\ref{alg:viewAtCube} dominates,
+where $m=X_{\textrm{max}} Y_{\textrm{max}} Z_{\textrm{max}}$ is the spatial size of the universe,
+and $n$ is the number of player.
 
 \begin{algorithm}
-\caption{Algorithm to update players in a cube by mechanisms}
+\KwInput{\\
+  \Indp
+  $T_i, X_i, Y_i, Z_i$ position of the viewing location\\
+  $L_{TXYZ}$ 4D array of list of player data
+}
+\KwOutput{\\
+  \Indp
+  $M$ map from player id to player data\\
+  $\Lambda_{XYZ}$ 3D array of map from group id to list of player id
+}
+
+Initialize empty $M$ and $\Lambda_{XYZ}$\;
+\ForEach{$X_j, Y_j, Z_j$}{
+  $T_j \gets T_i - \tau(\overrightarrow{U_i}, (X_j, Y_j, Z_j))$\;
+  \ForEach{data of player $k$ in $L_{T_j X_j Y_j Z_j}$}{
+    \If{$M$ has key $k$}{
+      \If{$T$ of $M[k]$ < $T_k$}{
+        Replace $M[k]$ by this new data\;
+      }
+      \Else{
+        Store data of player $k$ to $M[k]$\;
+      }
+    }
+  }
+}
+Associate the player id from $M$ to the corresponding list in $\Lambda_{XYZ}$ by spatial coordinates and group id\;
+\Return $(M, \Lambda_{XYZ})$
+
+\caption{Compute the view of the universe at a cube, ignore the zero time delay when player are in the same group}
+\label{alg:viewAtCube}
+\end{algorithm}
+
+\begin{algorithm}
+\KwInput{\\
+  \Indp
+  $g_i$ group id\\
+  $T_j, X_j, Y_j, Z_j$ position of the viewing location\\
+  $M$ map from player id to player data\\
+  $\Lambda_{XYZ}$ 3D array of map from group id to list of player id\\
+  $L_{TXYZ}$ 4D array of list of player data
+}
+\KwOutput{\\
+  \Indp
+  $M'$ map from player id to player data\\
+  $\Lambda'_{XYZ}$ 3D array of map from group id to list of player id
+}
+
+$M' \gets M$\;
+$\Lambda'_{XYZ} \gets \Lambda_{XYZ}$\;
+\ForEach{data of player $k$ in $L_{T_j X_j Y_j Z_j}$ where $g(\overrightarrow{u_k}, \overrightarrow{U_k}) = g_i$}{
+  \If{$T$ of $M[k]$ < $T_k$}{
+    Replace $M'[k]$ by this new data\;
+    Update the corresponding position of player $k$ in $\Lambda'_{XYZ}$\;
+  }
+}
+\Return $(M', \Lambda'_{XYZ})$
+
+\caption{Compute the view of the universe for players in a group.}
+\label{alg:viewAtGroup}
+\end{algorithm}
+
+The view of the universe of a player is used by mechanisms to update the player data and generate commands to send.
+Regular mechanisms update the data of the player each turn,
+while dilated mechanisms update the player if the time dilation counter is greater than zero to account for the time dilation effect.
+The generated commands are executed immediately if the target player is within the same group of the sender,
+otherwise the commands are stored in $M_{\textrm{command}}$.
+Algorithm~\ref{alg:mechanisms} shows the overall iterative process.
+
+\begin{algorithm}
+\KwInput{\\
+  \Indp
+  $M_\textrm{current}$ map from player id to current player data\\
+  Universe data
+}
+
+\ForEach{$(X_j, Y_j, Z_j)$}{
+  Compute the view of the universe at this cube by algorithm~\ref{alg:viewAtCube}\;
+  \ForEach{group in this cube}{
+    Compute the view of the universe at this group by algorithm~\ref{alg:viewAtGroup}\;
+    \ForEach{data of player $k$ in this group}{
+      Update $M_\textrm{current}[k]$ by all regular mechanisms\;
+      \If{$\mu_k \geq 0$}{
+        Update $M_\textrm{current}[k]$ by all dilated mechanisms\;
+      }
+    }
+    \ForEach{generated command where target player $l$ is in this group}{
+      Update $M_\textrm{current}[l]$ by $f_{\text{target}}$ of the command\;
+    }
+  }
+}
+Add the rest of commands to $M_{\textrm{command}}$ by the target player id of the commands\;
+
+\caption{Update all players by mechanisms.}
 \label{alg:mechanisms}
-\begin{algorithmic}[1]
-  \Input
-    \Desc{Coordinates $(X', Y', Z')$}
-  \EndInput
-  \Output
-    \Desc{A list of commands}
-  \EndOutput
-  \State Compute the shared 3D view by Algorithm~\ref{alg:viewAtCube}
-  \ForAll{Group in $(X', Y', Z')$}
-    \State Compute the 3D view for this group by Algorithm~\ref{alg:viewAtPlayer}
-    \ForAll{player $i$ in group}
-      \If{$b_{ri}$ is true}
-        \State Update player data by $f_{\textrm{rm}}$ and $f_{\textrm{dm}}$,
-      \Else
-        \State Update player data by $f_{\textrm{rm}}$
-      \EndIf
-    \EndFor
-    \ForAll{generated command}
-      \If{target player is in this group}
-        \State Update target player by $f_{\text{target}}$ 
-      \EndIf
-    \EndFor
-  \EndFor
-  \State \Return the rest of the generated commands
-\end{algorithmic}
 \end{algorithm}
 
 \subsection{Process command map} \label{ssec:command}
 
-The command map $M_c$ is a map from player id to a list of commands that is sending to that player.
+The command map $M_{\textrm{command}}$ is a map from player id to a list of commands that is being sent to that player.
 At each turn, the distance between the target player and the sent positions of all commands in the list are calculated,
-the command is executed on the player if the spacetime interval is larger than zero.
+and the command is executed on the player if the spacetime interval is larger than zero.
 Algorithm~\ref{alg:command} illustrates the process.
 
 \begin{algorithm}
-\caption{Algorithm to process command map}
+\KwInput{\\
+  \Indp
+  $M_\textrm{current}$ map from player id to current player data\\
+  $M_{\textrm{command}}$ map from player id to list of commands
+}
+
+\ForEach{key $i$ in $M_{\textrm{command}}$}{
+  Get the integer coordinates $\textbf{S}_i$ of player $i$ from $M_\textrm{current}[i]$\;
+  \ForEach{command $C$ in the list $M_{\textrm{command}}[i]$}{
+    \If{$\|\textbf{S}_{\textrm{from}} - \textbf{S}_i\| \geq 0$}{
+      Update $M_\textrm{current}[i]$ by $f_{\text{target}}$ of the command\;
+    }
+  }
+}
+Remove all executed commands\;
+
+\caption{Process command map.}
 \label{alg:command}
-\begin{algorithmic}[1]
-  \Input
-    \Desc{$M_c$ the command map}
-  \EndInput
-  \ForAll{key $i$ in $M_c$}
-    \State Get list of command $M_c[i]$
-    \ForAll{command $C$ in the list}
-      \If{$\|\textbf{s}_{\textrm{from}} - \textbf{s}_i\| \geq 0$}
-        \State Execute the command
-      \EndIf
-    \EndFor
-  \EndFor
-  \State Remove all executed commands
-\end{algorithmic}
 \end{algorithm}
 
-\subsection{AI input} \label{ssec:ai}
+\subsection{Move players and add afterimages} \label{ssec:move}
 
-The AI function $f_{\textrm{AI}}$ determines the commands to be sent given the 3D view of a player.
-Unlike mechanisms, a command needs to be self-executed on the sender first,
-then the command will be sent if the self-execution succeeded.
-Similar to Sec.~\ref{ssec:mechanisms}, commands should be executed immediately if the
-time delay between the target and the sender is zero, it is more convenient to
-consider all player data in a cube in the algorithm, 
-as demonstrated in Algorithm~\ref{alg:ai}.
-The output commands from Algorithm~\ref{alg:ai} are then grouped by id of the target
-player, and added to $M_c$ after randomizing the order of senders.
-
-\begin{algorithm}
-\caption{Algorithm to compute and process AI input}
-\label{alg:ai}
-\begin{algorithmic}[1]
-  \Input
-    \Desc{Coordinates $(X', Y', Z')$}
-  \EndInput
-  \Output
-    \Desc{A list of commands}
-  \EndOutput
-  \State Compute the shared 3D view by Algorithm~\ref{alg:viewAtCube}
-  \ForAll{group in $(X', Y', Z')$}
-    \State Compute the 3D view for this group by Algorithm~\ref{alg:viewAtPlayer}
-    \ForAll{player $i$ in group}
-      \State Compute commands by $f_{\textrm{AI}}$
-      \ForAll{command from player $i$}
-        \State Self-execute the command by $f_{\text{self}}$
-        \State Keep the command if succeeded
-        \If{the target of the command is self}
-          \State Execute the command to self by $f_{\text{target}}$
-        \EndIf
-      \EndFor
-    \EndFor
-    \ForAll{Command}
-      \If{Target player is in this group}
-        \State Update target player by $f_{\text{target}}$ 
-      \EndIf
-    \EndFor
-  \EndFor
-  \State \Return the rest of the generated commands
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Move players, add afterimages, and update time} \label{ssec:move}
-
-Moving players and storing their data require additional considerations in this simulation framework,
-and here is the reason:
+Moving players and storing their data requires additional considerations in this simulation framework.
+Consider the following example:
 \begin{enumerate}
   \item assume player $i$ and player $j$ are located in the same cube,
   \item player $j$ moves to the other cube,
@@ -573,215 +476,223 @@ and here is the reason:
 
 This ``disappearance'' is caused by the problem of the integer-based coordinates used in the computation of player's 3D view.
 
-Consider a more generic situation, supposed player $i$ is located at $\overrightarrow{U_i}$, 
+Consider a more generic situation: suppose player $i$ is located at $\overrightarrow{U_i}$, 
 and player $j$ moves from $\overrightarrow{U_j}$ to $\overrightarrow{U_k}$.
 Ignoring the possibility of zero time delay, the maximum time player $i$ has to wait to see player $j$
-is bounded by the Eq.~\ref{eq:deltaT},
+is bounded by Eq.~\ref{eq:deltaT},
 
-\begin{align*}
-  \Delta T &= td(\overrightarrow{U_i}, \overrightarrow{U_j}) - td(\overrightarrow{U_i}, \overrightarrow{U_k}), \\
+\begin{align} ~\label{eq:deltaT}
+  \Delta T &= \tau(\overrightarrow{U_i}, \overrightarrow{U_j}) - \tau(\overrightarrow{U_i}, \overrightarrow{U_k}), \\
   &= \left \lceil \frac{|\overrightarrow{U_i} - \overrightarrow{U_j}|}{c} \right \rceil - \left \lceil \frac{|\overrightarrow{U_i} - \overrightarrow{U_k}|}{c} \right \rceil,  \\
   &\leq \left \lceil \frac{|\overrightarrow{U_i} - \overrightarrow{U_j}|}{c} - \frac{|\overrightarrow{U_i} - \overrightarrow{U_k}|}{c} \right \rceil, \\
   &\leq \left \lceil \frac{|\overrightarrow{U_j} - \overrightarrow{U_k}|}{c} \right \rceil, \\
-\end{align*}
-
-\begin{equation} \label{eq:deltaT}
-  \Delta T \leq td(\overrightarrow{U_j}, \overrightarrow{U_k}).
-\end{equation}
+  &=\tau(\overrightarrow{U_j}, \overrightarrow{U_k}).
+\end{align}
 
 Therefore, if we include back the possibility where the time delay between player $i$ and player $j$ can be zero,
-the maximum duration of the disappearance produced by the movement is bounded by $\Delta T_{max} = td((0, 0, 0), (1, 1, 1))$.
+the maximum duration of the disappearance produced by the movement is bounded by $\Delta T_{\textrm{max}} = \tau((0, 0, 0), (1, 1, 1))$.
 To prevent the unrealistic disappearance from happening, the old player data has to stay at the original
-position for at least $\Delta T_{max}$ turn, we call this the ``afterimage'' of the player.
+position for at least $\Delta T_{\textrm{max}}$ turn, we call this the ``afterimage'' of the player.
 Note that afterimages only participate in the 3D view of players, they should not be updated by commands or mechanisms.
 
-Algorithm~\ref{alg:move} does multiple things: update the universe time, 
-move players by their velocities, synchronize time of players,
-store old coordinates to the history of player, clean the history if the stored coordinates is too old,
-and add the afterimages to the latest data in the 4D data array.
-Since the universe time has been updated, this simulation step has finished. 
-The universe should go to the next step and loop over all algorithms in Sec.~\ref{sec:simulation} again.
+Algorithm~\ref{alg:move} does multiple things: it updates the universe time, 
+it moves players by their velocities, it synchronizes time of players,
+it stores old coordinates to the history of player, it cleans the history if the stored coordinates is too old,
+and it adds the current player and afterimages to the latest spatial 3D array in the 4D data array $L_{TXYZ}$.
+Assuming that players are evenly distributed in the universe, 
+the time complexity of Algorithm~\ref{alg:move} is $O \left(\frac{n^2}{m} \right)$,
+recall that $m=X_{\textrm{max}} Y_{\textrm{max}} Z_{\textrm{max}}$ is the spatial size of the universe,
+and $n$ is the number of player.
+Since the universe time has been updated, this simulation step has finished, 
+the universe should go to the next step and loop over all algorithms in Sec.~\ref{sec:simulation} again.
 
 \begin{algorithm}
-\caption{Algorithm to move player, add afterimage, and update time}
+\KwInput{\\
+  \Indp
+  $M_\textrm{current}$ map from player id to current player data\\
+  Universe data
+}
+
+$T_{\textrm{current}} \gets T_{\textrm{current}} + 1$\;
+Initialize a 3D array of list of player data $L_{XYZ}$\;
+\ForEach{data of player $i$ in $M_\textrm{current}$}{
+  $t_i \gets T_{\textrm{current}}$\;
+  $x_i \gets x_i + v_{ix}$\;
+  $y_i \gets y_i + v_{iy}$\;
+  $z_i \gets z_i + v_{iz}$\;
+  $T_i \gets T_{\textrm{current}}$\;
+  $X_i \gets \lfloor x_i \rfloor$\;
+  $Y_i \gets \lfloor y_i \rfloor$\;
+  $Z_i \gets \lfloor z_i \rfloor$\;
+  $g_i \gets g(\overrightarrow{u_i}, \overrightarrow{U_i})$ by Eq.~\ref{eq:group}\;
+  \If{coordinates or group is new}{
+    Save old coordinates to history $H_i$\;
+  }
+  \ForEach{$(T_i', X_i', Y_i', Z_i')$ in $H_i$}{
+    Remove from $H_i$ if $T_{\textrm{current}} - T' > \Delta T_{\textrm{max}}$\;
+  }
+  Save the new data to $L_{X_i Y_i Z_i}$\;
+  \ForEach{$(T_i', X_i', Y_i', Z_i')$ in $H_i$}{
+    Find the old player data from $L_{T_i' X_i' Y_i' Z_i'}$\;
+    Add the old player data to $L_{X_i' Y_i' Z_i'}$\;
+  }
+}
+Drop the oldest 3D spatial array from $L_{TXYZ}$\;
+Add $L_{XYZ}$ as the latest spatial array to $L_{TXYZ}$\;
+
+\caption{Move player and add afterimages.}
 \label{alg:move}
-\begin{algorithmic}[1]
-  \State $T_{\textrm{current}} \gets T_{\textrm{current}} + 1$
-  \ForAll{player $i$}
-    \State $t_i \gets T_{\textrm{current}}$
-    \State $x_i \gets x_i + v_{ix}$
-    \State $y_i \gets y_i + v_{iy}$
-    \State $z_i \gets z_i + v_{iz}$
-    \State $T_i \gets T_{\textrm{current}}$
-    \State $X_i \gets \lfloor x_i \rfloor$
-    \State $Y_i \gets \lfloor y_i \rfloor$
-    \State $Z_i \gets \lfloor z_i \rfloor$
-    \State $g_i \gets g(\overrightarrow{u_i}, \overrightarrow{U_i})$ by Eq.~\ref{eq:group}
-    \If{coordinates or group is new}
-      \State Save old coordinates to history $H_i$
-    \EndIf
-    \ForAll{$(T_i', X_i', Y_i', Z_i')$ in $H_i$}
-      \State Remove if $T_{\textrm{current}} - T' > \Delta T_{max}$
-    \EndFor
-    \ForAll{$(T_i', X_i', Y_i', Z_i')$ in $H_i$}
-      \State Add the old data to $L_{T_i X_i' Y_i' Z_i'}$
-    \EndFor
-  \EndFor
-\end{algorithmic}
 \end{algorithm}
 
 \section{Discussion}
 
-\subsection{New player and dead player}
+The presented algorithms form the backbone of our computational framework, 
+``Relativitization''~\cite{relativitization}.
+There are technical subtleties that are not discussed here,
+such as creating new players, removing dead players,
+introducing randomness to models, parallelization of the algorithms, 
+generating deterministic outcomes from parallelized simulations with random number generators,
+interactive human input to intervene in a simulation, etc.
+Nevertheless, the framework implements the major part of the technical subtleties, 
+and provides a suitable interface to ease the development of any 4D, relativistic ABM.
 
-Because creating new player and defining living status of players are not crucial to all ABM,
-they are not introduced in Sec.~\ref{sec:simulation}.
-In fact, Relativitization supports both creating new player and turning alive player to dead player.
+It can be interesting to implement a classical ABM into the framework. 
+Spatial ABMs with non-local interactions, 
+such as the classical flocking model~\cite{reynolds1987flocks},
+are particularly suitable.
+These models are naturally affected by the time delay
+imposed by the speed of light limitation.
+Simulating such a model in the Relativitization framework allows us to explore the effects of time delay on the model.
 
-To avoid violation of the speed of light limit, new player cannot be created freely anywhere.
-Instead, a command has to be sent by a player, and the command executes on self or another player
-to indicate in the player data that a new player should be created.
-This information is visited by an algorithm every turn and a new player will be created at the location
-of the player with this information.
+Ultimately, existing ABMs might not be suitable to describe interstellar society.
+A solid understanding of social mechanisms and physics,
+together with some artistic imagination,
+are needed to build inspiring interstellar ABMs.
+As a first step,
+we have integrated a few social mechanisms to build a big ``model'', which is also a game. 
+The ``model'' can be found on the GitHub\footnote{https://github.com/Adriankhl/relativitization} repository of our framework.
 
-To turn an alive player dead, there needs to be a command to execute on that to change the living status.
-The dead player will not be processed by any algorithms in Sec.~\ref{sec:simulation}, but it will still
-remain to be in the history stored in the 4D data array. Until no other player can see the player in their 3D view,
-the dead player will disappear from the 4D data array.
+Apart from the possibility of implementing different models using the framework, 
+the algorithms may also be optimized further.
+For example, the iteration in Sec.~\ref{ssec:mechanisms} has a time complexity of $O(mn)$.
+A naive alternative implementation to iterate over all the combinations of players could change the complexity to $O(n^2)$,
+which could have better performance when the density of players is low.
+We leave these potential improvements to future research.
 
-\subsection{Time complexity, optimized 3D view}
+\section{Conclusion}
 
-The time complexity of a model depends on the actual design of mechanisms and AI computation.
-If we assume that the extra computation costs are $O(1)$, then most of algorithms presented initial
-this paper are $O(n)$, where $n$ is the number of players. The only exception is Algorithm~\ref{alg:viewAtCube},
-it has the time complexity $O(n m)$, where $m$ is the spatial volume of the universe.
-
-In practice, if we want to avoid $O(n)$ mechanisms and AI computation,
-the model often need to get a set of neighbouring cubes around a player to determine
-how the player should be updated. 
-The map data structure of the 3D view introduced in Sec.~\ref{ssec:view}
-does not have a fast method to get the neighbouring cubes.
-Therefore, in the actual implementation of the 3D view of players in Relativitization,
-the original map is supplemented with a 3D player id array to allow fast spatial lookup,
-at the price of having a slower computation speed of 3D view.
-
-\subsection{Parallelization}
-
-The data flow in simulation framework is pretty straightforward,
-most of the computations only depend on the historical data in the 4D array.
-Therefore, as long as immutability of data is properly handled,
-many of the algorithms can be easily parallelized.
-
-In Relativitization, the mechanisms algorithm in Sec.~\ref{ssec:mechanisms}
-and the AI input algorithm in Sec.~\ref{ssec:ai} are computed in parallel for each cube,
-and the command map process algorithm in Sec.~\ref{ssec:command} is computed in parallel for each player.
-
-\subsection{Rest mass and photon rocket}
-
-There is an important aspect of physics we have yet to talk about in this paper - how should the velocity of player be changed?
-Of course, an ABM does not necessary be physically realistic, and the velocity can change to whatever value
-the modeler wants.
-Nevertheless, the major goal of this simulation framework is to assure that the model obeys relativistic physics,
-it makes sense to also be physically correct regarding the velocity.
-
-A natural choice of a physically reasonable propulsion system is photon rocket~\cite{pierce1959relativity}.
-In spite of the debates on various factors affecting the speed limit of a photon rocket~\cite{haug2017ultimate, tommasini2019comment}.
-ideal photon rocket is a good starting point to introduce realism in how a player should move.
-
-In order to formulate how a player is propelled by a photon rocket, 
-we have to define a ``rest mass'' property in the extra player data $D_i$.
-Denote the initial rest mass of the player as $m_i$ and the initial velocity as $\overrightarrow{v_i}$.
-After the photon rocket propulsion,
-denote the final rest mass of the player as $m_f$ and the final velocity as $\overrightarrow{v_f}$. 
-Sometimes it is convenient to express $\overrightarrow{v_f}$ as $v_f \hat{v}_f$ to separate the magnitude and the unit vector.
-
-In special relativity, 4-momentum is used to represent the kinematic state of an object.
-There are 3 momenta involved in a photon rocket propulsion process:
-\begin{itemize}
-  \item photon 4-momentum: $P_{ph}$,
-  \item player initial 4-momentum $P_i = (\gamma_i m_i c, \gamma_i m_i \overrightarrow{v_i}) $, 
-        where $\gamma_i$ is the initial Lorentz factor,
-  \item player final 4-momentum $P_f = (\gamma_f m_f c, \gamma_f m_f \overrightarrow{v_f})$, 
-        where $\gamma_f$ is the final Lorentz factor.
-\end{itemize}
-
-One of the useful scenarios is that the player turn some rest mass into photon, i.e., $m_i > m_f$,
-and given that the player will face towards a specific direction after the propulsion,
-we want to know the final velocity $v_f$.
-From conservation of 4-momentum:
-\begin{align*}
-    & P_{ph} = P_i - P_f, \\
-    & P_{ph}^2 = P_i^2 + P_f^2 - 2 P_i \cdot P_f, \\
-    & 0 = (m_i c)^2 + (m_f c)^2 - 2 \gamma_i \gamma_f m_i m_f ( c^2 - v_f \overrightarrow{v_i} \cdot \hat{v}_f), \\
-    & (m_i c)^2 + (m_f c)^2 = \frac{2 \gamma_i m_i m_f}{\sqrt{1 - v_f^2 / c^2}} ( c^2 - v_f \overrightarrow{v_i} \cdot \hat{v}_f), \\
-    & \left(\frac{(m_i c)^2 + (m_f c)^2}{2 \gamma_i m_i m_f}\right)^2 = \frac{(c^2 - v_f \overrightarrow{v_i} \cdot \hat{v}_f)^2}{1 - v_f^2 / c^2}, \\
-    & \left(\frac{(m_i c)^2 + (m_f c)^2}{2 \gamma_i m_i m_f}\right)^2 (1 - v_f^2 / c^2) = c^4 - 2 c^2 v_f \overrightarrow{v_i} \cdot \hat{v}_f + v_f^2 (\overrightarrow{v_i} \cdot \hat{v}_f)^2. \\
-\end{align*}
-
-Eq.~\ref{eq:speed} is a quadratic equation, solving the equation gives us the solution of $v_f$:
-\begin{align} \label{eq:speed}
-\begin{split}
-    &((\overrightarrow{v_i} \cdot \hat{v}_f)^2 + \left(\frac{(m_i)^2 + (m_f)^2}{2 \gamma_i m_i m_f}\right)^2 c^2) v_f^2 + \\
-    &(- 2 c^2 \overrightarrow{v_i} \cdot \hat{v}_f) v_f + c^4 \left(1 - \left(\frac{(m_i)^2 + (m_f)^2}{2 \gamma_i m_i m_f}\right)^2 \right) = 0.
-\end{split}
-\end{align}
-
-Another useful scenario is that given the final velocity $\overrightarrow{v_f}$,
-we want to know the rest mass needed to be converted into photon.
-\begin{align*}
-    P_{ph} &= P_i - P_f \\
-    P_{ph}^2 &= P_i^2 + P_f^2 - 2 P_i \cdot P_f \\
-    0 &= (m_i c)^2 + (m_f c)^2 - 2 \gamma_i \gamma_f m_i m_f ( c^2 - \overrightarrow{v_i} \cdot \overrightarrow{v_f}) \\
-\end{align*}
-
-Eq.~\ref{eq:mass} is also a quadratic equation, solving this equation gives us the solution of $m_f$:
-\begin{equation} \label{eq:mass}
-    c^2 m_f^2 + (- 2 \gamma_i \gamma_f m_i ( c^2 - \overrightarrow{v_i} \cdot \overrightarrow{v_f})) m_f + (m_i c)^2 = 0.
-\end{equation}
-
-There are in-built utility functions in Relativitization to compute these solutions.
-Nevertheless, modelers are free to implementation other more realistic propulsion equations in their model.
-
-%TODO
-%\subsection{Alternative implementation}
-
-\section{Summary}
-
-In this paper, we have presented a set of algorithms to implement ABM simulation in a 4D, relativistic spacetime.
+In this paper, we have presented a set of algorithms to implement ABM simulations in a 4D, relativistic spacetime.
 Based on these algorithms, we have developed a simulation framework we call ``Relativitization''~\cite{relativitization}.
-Our framework will lower the barrier of entry and encourage social scientists
+Our framework will lower the barrier of entry for social scientists
 to apply their expertise to explore the interstellar future of human civilization.
 We hope our framework can be used to initiate meaningful and academically interesting discussions
 about our future.
 
-%\bibliographystyle{unsrt}
-%\bibliography{references}  %%% Uncomment this line and comment out the ``thebibliography'' section below to use the external .bib file (using bibtex) .
+\section*{Acknowledgement}
+We thank Diego Garlaschelli, Alexandru Babeanu, Michael Szell, and all QSS members of the CWTS institute for useful discussion. 
+%
+% ---- Bibliography ----
+%
 \printbibliography
 
-
-%%% Uncomment this section and comment out the \bibliography{references} line above to use inline references.
-% \begin{thebibliography}{1}
-
-% 	\bibitem{kour2014real}
-% 	George Kour and Raid Saabne.
-% 	\newblock Real-time segmentation of on-line handwritten arabic script.
-% 	\newblock In {\em Frontiers in Handwriting Recognition (ICFHR), 2014 14th
-% 			International Conference on}, pages 417--422. IEEE, 2014.
-
-% 	\bibitem{kour2014fast}
-% 	George Kour and Raid Saabne.
-% 	\newblock Fast classification of handwritten on-line arabic characters.
-% 	\newblock In {\em Soft Computing and Pattern Recognition (SoCPaR), 2014 6th
-% 			International Conference of}, pages 312--318. IEEE, 2014.
-
-% 	\bibitem{hadash2018estimate}
-% 	Guy Hadash, Einat Kermany, Boaz Carmeli, Ofer Lavi, George Kour, and Alon
-% 	Jacovi.
-% 	\newblock Estimate and replace: A novel approach to integrating deep neural
-% 	networks with existing applications.
-% 	\newblock {\em arXiv preprint arXiv:1804.09028}, 2018.
-
-% \end{thebibliography}
-
-
 \end{document}
+
+%\subsection{Rest mass and photon rocket}
+%
+%There is an important aspect of physics we have yet to talk about in this paper - how should the velocity of player be changed?
+%Of course, an ABM does not necessary be physically realistic, and the velocity can change to whatever value
+%the modeler wants.
+%Nevertheless, the major goal of this simulation framework is to assure that the model obeys relativistic physics,
+%it makes sense to also be physically correct regarding the velocity.
+%
+%A natural choice of a physically reasonable propulsion system is photon rocket~\cite{pierce1959relativity}.
+%In spite of the debates on various factors affecting the speed limit of a photon rocket~\cite{haug2017ultimate, tommasini2019comment}.
+%ideal photon rocket is a good starting point to introduce realism in how a player should move.
+%
+%In order to formulate how a player is propelled by a photon rocket, 
+%we have to define a ``rest mass'' property in the extra player data $D_i$.
+%Denote the initial rest mass of the player as $m_i$ and the initial velocity as $\overrightarrow{v_i}$.
+%After the photon rocket propulsion,
+%denote the final rest mass of the player as $m_f$ and the final velocity as $\overrightarrow{v_f}$. 
+%Sometimes it is convenient to express $\overrightarrow{v_f}$ as $v_f \hat{v}_f$ to separate the magnitude and the unit vector.
+%
+%In special relativity, 4-momentum is used to represent the kinematic state of an object.
+%There are 3 momenta involved in a photon rocket propulsion process:
+%\begin{itemize}
+%  \item photon 4-momentum: $P_{ph}$,
+%  \item player initial 4-momentum $P_i = (\gamma_i m_i c, \gamma_i m_i \overrightarrow{v_i}) $, 
+%        where $\gamma_i$ is the initial Lorentz factor,
+%  \item player final 4-momentum $P_f = (\gamma_f m_f c, \gamma_f m_f \overrightarrow{v_f})$, 
+%        where $\gamma_f$ is the final Lorentz factor.
+%\end{itemize}
+%
+%One of the useful scenarios is that the player turn some rest mass into photon, i.e., $m_i > m_f$,
+%and given that the player will face towards a specific direction after the propulsion,
+%we want to know the final velocity $v_f$.
+%From conservation of 4-momentum:
+%\begin{align*}
+%    & P_{ph} = P_i - P_f, \\
+%    & P_{ph}^2 = P_i^2 + P_f^2 - 2 P_i \cdot P_f, \\
+%    & 0 = (m_i c)^2 + (m_f c)^2 - 2 \gamma_i \gamma_f m_i m_f ( c^2 - v_f \overrightarrow{v_i} \cdot \hat{v}_f), \\
+%    & (m_i c)^2 + (m_f c)^2 = \frac{2 \gamma_i m_i m_f}{\sqrt{1 - v_f^2 / c^2}} ( c^2 - v_f \overrightarrow{v_i} \cdot \hat{v}_f), \\
+%    & \left(\frac{(m_i c)^2 + (m_f c)^2}{2 \gamma_i m_i m_f}\right)^2 = \frac{(c^2 - v_f \overrightarrow{v_i} \cdot \hat{v}_f)^2}{1 - v_f^2 / c^2}, \\
+%    & \left(\frac{(m_i c)^2 + (m_f c)^2}{2 \gamma_i m_i m_f}\right)^2 (1 - v_f^2 / c^2) = c^4 - 2 c^2 v_f \overrightarrow{v_i} \cdot \hat{v}_f + v_f^2 (\overrightarrow{v_i} \cdot \hat{v}_f)^2. \\
+%\end{align*}
+%
+%Eq.~\ref{eq:speed} is a quadratic equation, solving the equation gives us the solution of $v_f$:
+%\begin{align} \label{eq:speed}
+%\begin{split}
+%    &((\overrightarrow{v_i} \cdot \hat{v}_f)^2 + \left(\frac{(m_i)^2 + (m_f)^2}{2 \gamma_i m_i m_f}\right)^2 c^2) v_f^2 + \\
+%    &(- 2 c^2 \overrightarrow{v_i} \cdot \hat{v}_f) v_f + c^4 \left(1 - \left(\frac{(m_i)^2 + (m_f)^2}{2 \gamma_i m_i m_f}\right)^2 \right) = 0.
+%\end{split}
+%\end{align}
+%
+%Another useful scenario is that given the final velocity $\overrightarrow{v_f}$,
+%we want to know the rest mass needed to be converted into photon.
+%\begin{align*}
+%    P_{ph} &= P_i - P_f \\
+%    P_{ph}^2 &= P_i^2 + P_f^2 - 2 P_i \cdot P_f \\
+%    0 &= (m_i c)^2 + (m_f c)^2 - 2 \gamma_i \gamma_f m_i m_f ( c^2 - \overrightarrow{v_i} \cdot \overrightarrow{v_f}) \\
+%\end{align*}
+%
+%Eq.~\ref{eq:mass} is also a quadratic equation, solving this equation gives us the solution of $m_f$:
+%\begin{equation} \label{eq:mass}
+%    c^2 m_f^2 + (- 2 \gamma_i \gamma_f m_i ( c^2 - \overrightarrow{v_i} \cdot \overrightarrow{v_f})) m_f + (m_i c)^2 = 0.
+%\end{equation}
+%
+%There are in-built utility functions in Relativitization to compute these solutions.
+%Nevertheless, modelers are free to implementation other more realistic propulsion equations in their model.
+
+%\begin{algorithm}
+%\caption{Algorithm to compute and process AI input}
+%\label{alg:ai}
+%\begin{algorithmic}[1]
+%  \Input
+%    \Desc{Coordinates $(X', Y', Z')$}
+%  \EndInput
+%  \Output
+%    \Desc{A list of commands}
+%  \EndOutput
+%  \State Compute the shared 3D view by Algorithm~\ref{alg:viewAtCube}
+%  \ForAll{group in $(X', Y', Z')$}
+%    \State Compute the 3D view for this group by Algorithm~\ref{alg:viewAtGroup}
+%    \ForAll{player $i$ in group}
+%      \State Compute commands by $f_{\textrm{AI}}$
+%      \ForAll{command from player $i$}
+%        \State Self-execute the command by $f_{\text{self}}$
+%        \State Keep the command if succeeded
+%        \If{the target of the command is self}
+%          \State Execute the command to self by $f_{\text{target}}$
+%        \EndIf
+%      \EndFor
+%    \EndFor
+%    \ForAll{Command}
+%      \If{Target player is in this group}
+%        \State Update target player by $f_{\text{target}}$ 
+%      \EndIf
+%    \EndFor
+%  \EndFor
+%  \State \Return the rest of the generated commands
+%\end{algorithmic}
+%\end{algorithm}
+
