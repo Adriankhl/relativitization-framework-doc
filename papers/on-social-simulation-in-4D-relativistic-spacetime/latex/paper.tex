@@ -218,10 +218,10 @@ Universe is an overarching structure which aggregates all necessary data and fun
 An universe has:
 \begin{itemize}
   \item a current universe time $T_{\textrm{current}}$,
-  \item a 4-dimension array of lists of player data $L_{TXYZ}$,
+  \item a 4-dimension array of maps from player id to lists of player data $M_{TXYZ}$,
         so that the data of a player residing at $(T, X, Y, Z)$ is stored in the associated list, 
         the ``afterimages'' of players are also stored in the corresponding list (Sec~\ref{ssec:move}),
-  \item a map $M_{\textrm{command}}$ from player id to a list of command,
+  \item a map $M_{\textrm{command}}$ from player id to lists of commands,
         such that a command in the list will be executed when the player receive the command,
   \item other universe global data $D_G$ relevant to the model,
 \end{itemize}
@@ -283,7 +283,7 @@ For example, if the global data is modified if ``all'' player data satisfy a con
 we have to be careful about what we mean by ``all'' here.
 In the universe, the maximum time delay equals $\tau_{\textrm{max}} = \tau((0, 0, 0), (max(X), max(Y), max(Z)))$.
 To fulfill the speed of light constraint, the update function has to check whether all player data in
-$L_{TXYZ}$, where $T_{\textrm{current}} - \tau_{\textrm{max}} \leq T \leq T_{\textrm{current}}$,
+$M_{TXYZ}$, where $T_{\textrm{current}} - \tau_{\textrm{max}} \leq T \leq T_{\textrm{current}}$,
 $0 \leq X \leq max(X)$, $0 \leq Y \leq max(Y)$, and $0 \leq Z \leq max(Z)$,
 satisfy that condition.
 
@@ -341,25 +341,25 @@ and $n$ is the number of player.
 \KwInput{\\
   \Indp
   $T_i, X_i, Y_i, Z_i$ position of the viewing location\\
-  $L_{TXYZ}$ 4D array of list of player data
+  $M_{TXYZ}$ 4D array of maps from player id to lists of player data
 }
 \KwOutput{\\
   \Indp
   $M$ map from player id to player data\\
-  $\Lambda_{XYZ}$ 3D array of map from group id to list of player id
+  $\Lambda_{XYZ}$ 3D array of maps from group id to lists of player id
 }
 
 Initialize empty $M$ and $\Lambda_{XYZ}$\;
 \ForEach{$X_j, Y_j, Z_j$}{
   $T_j \gets T_i - \tau(\overrightarrow{U_i}, (X_j, Y_j, Z_j))$\;
-  \ForEach{data of player $k$ in $L_{T_j X_j Y_j Z_j}$}{
+  \ForEach{player data in $M_{T_j X_j Y_j Z_j}[k]$}{
     \If{$M$ has key $k$}{
-      \If{$T$ of $M[k]$ < $T_k$}{
-        Replace $M[k]$ by this new data\;
+      \If{$T$ of $M[k]$ < $T$ of the new player data}{
+        Replace $M[k]$ by this new player data\;
       }
-      \Else{
-        Store data of player $k$ to $M[k]$\;
-      }
+    }
+    \Else{
+      Store data of player $k$ to $M[k]$\;
     }
   }
 }
@@ -376,20 +376,20 @@ Associate the player id from $M$ to the corresponding list in $\Lambda_{XYZ}$ by
   $g_i$ group id\\
   $T_j, X_j, Y_j, Z_j$ position of the viewing location\\
   $M$ map from player id to player data\\
-  $\Lambda_{XYZ}$ 3D array of map from group id to list of player id\\
-  $L_{TXYZ}$ 4D array of list of player data
+  $\Lambda_{XYZ}$ 3D array of maps from group id to lists of player id\\
+  $M_{TXYZ}$ 4D array of maps from player id to lists of player data
 }
 \KwOutput{\\
   \Indp
   $M'$ map from player id to player data\\
-  $\Lambda'_{XYZ}$ 3D array of map from group id to list of player id
+  $\Lambda'_{XYZ}$ 3D array of maps from group id to lists of player id
 }
 
 $M' \gets M$\;
 $\Lambda'_{XYZ} \gets \Lambda_{XYZ}$\;
-\ForEach{data of player $k$ in $L_{T_j X_j Y_j Z_j}$ where $g(\overrightarrow{u_k}, \overrightarrow{U_k}) = g_i$}{
-  \If{$T$ of $M[k]$ < $T_k$}{
-    Replace $M'[k]$ by this new data\;
+\ForEach{player data in $M_{T_j X_j Y_j Z_j}[k]$ where $g(\overrightarrow{u_k}, \overrightarrow{U_k}) = g_i$}{
+  \If{$T$ of $M[k]$ < $T$ of the new player data}{
+    Replace $M'[k]$ by this new player data\;
     Update the corresponding position of player $k$ in $\Lambda'_{XYZ}$\;
   }
 }
@@ -436,7 +436,7 @@ Add the rest of commands to $M_{\textrm{command}}$ by the target player id of th
 
 \subsection{Process command map} \label{ssec:command}
 
-The command map $M_{\textrm{command}}$ is a map from player id to a list of commands that is being sent to that player.
+The command map $M_{\textrm{command}}$ is a map from player id to lists of commands that is being sent to that player.
 At each turn, the distance between the target player and the sent positions of all commands in the list are calculated,
 and the command is executed on the player if the spacetime interval is larger than zero.
 Algorithm~\ref{alg:command} illustrates the process.
@@ -445,7 +445,7 @@ Algorithm~\ref{alg:command} illustrates the process.
 \KwInput{\\
   \Indp
   $M_\textrm{current}$ map from player id to current player data\\
-  $M_{\textrm{command}}$ map from player id to list of commands
+  $M_{\textrm{command}}$ map from player id to lists of commands
 }
 
 \ForEach{key $i$ in $M_{\textrm{command}}$}{
@@ -498,11 +498,7 @@ Note that afterimages only participate in the 3D view of players, they should no
 Algorithm~\ref{alg:move} does multiple things: it updates the universe time, 
 it moves players by their velocities, it synchronizes time of players,
 it stores old coordinates to the history of player, it cleans the history if the stored coordinates is too old,
-and it adds the current player and afterimages to the latest spatial 3D array in the 4D data array $L_{TXYZ}$.
-Assuming that players are evenly distributed in the universe, 
-the time complexity of Algorithm~\ref{alg:move} is $O \left(\frac{n^2}{m} \right)$,
-recall that $m=X_{\textrm{max}} Y_{\textrm{max}} Z_{\textrm{max}}$ is the spatial size of the universe,
-and $n$ is the number of player.
+and it adds the current player and afterimages to the latest spatial 3D array in the 4D data array $M_{TXYZ}$.
 Since the universe time has been updated, this simulation step has finished, 
 the universe should go to the next step and loop over all algorithms in Sec.~\ref{sec:simulation} again.
 
@@ -514,7 +510,7 @@ the universe should go to the next step and loop over all algorithms in Sec.~\re
 }
 
 $T_{\textrm{current}} \gets T_{\textrm{current}} + 1$\;
-Initialize a 3D array of list of player data $L_{XYZ}$\;
+Initialize a 3D array of maps from player id to lists of player data $M_{XYZ}$\;
 \ForEach{data of player $i$ in $M_\textrm{current}$}{
   $t_i \gets T_{\textrm{current}}$\;
   $x_i \gets x_i + v_{ix}$\;
@@ -526,19 +522,19 @@ Initialize a 3D array of list of player data $L_{XYZ}$\;
   $Z_i \gets \lfloor z_i \rfloor$\;
   $g_i \gets g(\overrightarrow{u_i}, \overrightarrow{U_i})$ by Eq.~\ref{eq:group}\;
   \If{coordinates or group is new}{
-    Save old coordinates to history $H_i$\;
+    Save the previous coordinates to history $H_i$\;
   }
   \ForEach{$(T_i', X_i', Y_i', Z_i')$ in $H_i$}{
     Remove from $H_i$ if $T_{\textrm{current}} - T' > \Delta T_{\textrm{max}}$\;
   }
-  Save the new data to $L_{X_i Y_i Z_i}$\;
+  Save the new data to $M_{X_i Y_i Z_i}[i]$\;
   \ForEach{$(T_i', X_i', Y_i', Z_i')$ in $H_i$}{
-    Find the old player data from $L_{T_i' X_i' Y_i' Z_i'}$\;
-    Add the old player data to $L_{X_i' Y_i' Z_i'}$\;
+    Find the old player data from $M_{T_i' X_i' Y_i' Z_i'}[i']$\;
+    Add the old player data to $M_{X_i' Y_i' Z_i'}[i']$\;
   }
 }
-Drop the oldest 3D spatial array from $L_{TXYZ}$\;
-Add $L_{XYZ}$ as the latest spatial array to $L_{TXYZ}$\;
+Drop the oldest 3D spatial array from $M_{TXYZ}$\;
+Add $M_{XYZ}$ as the latest spatial array to $M_{TXYZ}$\;
 
 \caption{Move player and add afterimages.}
 \label{alg:move}
