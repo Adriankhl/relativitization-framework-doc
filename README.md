@@ -11,6 +11,7 @@ the [official Kotlin docs](https://kotlinlang.org/docs) if you are not familiar 
 * [Theoretical basis](./papers/on-social-simulation-in-4D-relativistic-spacetime/pdf/paper.pdf)
 * [General workflow](./guide/general-workflow.md)
 * [Object introduction](./guide/object-introduction.md)
+* [Example: flocking model](./guide/flocking-model.md)
 
 ## Contribute
 
