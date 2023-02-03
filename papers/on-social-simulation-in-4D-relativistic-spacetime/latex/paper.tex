@@ -60,11 +60,11 @@
 \maketitle              % typeset the title of the contribution
 
 \begin{abstract}
-Agent-based modeling (ABM) and simulation allow us to study social phenomena in hypothetical scenarios.
+Agent-based modeling and simulation allow us to study social phenomena in hypothetical scenarios.
 If we stretch our imagination, one of the interesting scenarios would be our interstellar future.
 To model an interstellar society, we need to consider relativistic physics,
-which is not straightforward to implement in existing ABM frameworks.
-In this paper, we present the mathematics and algorithmic details needed for simulating ABM in 4D relativistic spacetime.
+which is not straightforward to implement in existing agent-based simulation frameworks.
+In this paper, we present the mathematics and algorithmic details needed for simulating agent-based models in 4D relativistic spacetime.
 These algorithms form the basis of our open-source computational framework, ``Relativitization''~\cite{relativitization}.
 % We would like to encourage you to list your keywords within
 % the abstract section using the \keywords{...} command.
@@ -92,7 +92,7 @@ ABM can still be used for theoretical exposition~\cite{edmonds2015simulating}.
 
 To model agents in interstellar space, suppose we only consider a scale with normal stellar objects
 so that we can ignore the effects of general relativity, such as universe expansion and black holes,
-but we still have to consider the effect of special relativity.
+we still have to consider the effect of special relativity.
 In the context of ABM, where the simulation is computed under a set of inertial frames that are at rest to each other,
 we can simplify the theory of relativity into two core
 phenomena: speed of light as the upper bound of the speed of information travel, and
@@ -114,7 +114,7 @@ In this paper, the mathematics and the algorithms underlying the framework will 
 In Relativitization, an agent is called a ``player''.
 Players live in a universe.
 Ideally, computation should be done in every local frame following all players, 
-and the computation results can be synchronized by a Lorentz transformation.
+and the computation results can be synchronized by Lorentz transformations.
 However, this will make the framework and the model substantially more complex.
 Therefore, all computations are done according to some inertial frames that are at rest to each other.
 The spatial coordinates of a player are represented by floating-point numbers $x$, $y$ and $z$
@@ -183,8 +183,10 @@ A player is characterized by a set of data:
   \item integer coordinates $(T_i, X_i, Y_i, Z_i)$,
   \item a historical record of integer coordinates $H_i = \{(T_i', X_i', Y_i', Z_i') \mid T_i' < T_i \}$,
   \item floating-point coordinates $(t_i, x_i, y_i, z_i)$,
-  \item time dilation counter $\mu_i$, 
-        a floating point number to keep track of time dilation (see Sec.~\ref{ssec:mechanism_and_ai} and Sec.~\ref{ssec:mechanisms}),
+  \item time dilation counter variables $\mu_i$, a floating point variable,
+        and $\nu_i$, a boolean variable,
+        to keep track of time dilation (see Sec.~\ref{ssec:mechanism} and Sec.~\ref{ssec:mechanisms}),
+        $\mu_i = 0$ initially for all players,
   \item group id $g_i$,
   \item floating-point velocities $\overrightarrow{v_i} = (v_{ix}, v_{iy}, v_{iz})$,
   \item other data $D_i$ relevant to the model.
@@ -226,7 +228,7 @@ An universe has:
   \item other universe global data $D_G$ relevant to the model,
 \end{itemize}
 
-\subsection{Mechanism and AI} \label{ssec:mechanism_and_ai}
+\subsection{Mechanism} \label{ssec:mechanism}
 
 Given an instance of a universe, 
 the dynamics of players are based on predefined rules and the state of the universe observed by the players.
@@ -302,17 +304,21 @@ special relativity predicts that a moving observer $i$ experiences a time dilati
 where $\gamma_i$ is called the Lorentz factor.
 
 To account for the time-dilation effect, 
-the time dilation counter $\mu_i$ is updated by Algorithm~\ref{alg:dilation}
+the time dilation counter variables $\mu_i$ and $\nu_i$ are updated by Algorithm~\ref{alg:dilation}
 every turn for every player. 
-$\mu_{i}$ will then affect the mechanism processing in Sec.~\ref{ssec:mechanisms}.
+$\nu_{i}$ will then affect the mechanism processing in Sec.~\ref{ssec:mechanisms}.
 
 \begin{algorithm}
 \KwInput{$M_\textrm{current}$, map from player id to current player data}
 
 \ForEach{player $i$ in $M_\textrm{current}$}{
   $\mu_i \gets \mu_i + \sqrt{1 - \frac{v_i^2}{c^2}}$\;
-  \If{$\mu_i \geq 0$} {
+  \If{$\mu_i \geq 1$} {
     $\mu_i \gets \mu_i - 1$\;
+    $\nu_i \gets \textbf{true}$\;
+  }
+  \Else {
+    $\nu_i \gets \textbf{false}$\;
   }
 }
 
@@ -401,7 +407,8 @@ $\Lambda'_{XYZ} \gets \Lambda_{XYZ}$\;
 
 The view of the universe of a player is used by mechanisms to update the player data and generate commands to send.
 Regular mechanisms update the data of the player each turn,
-while dilated mechanisms update the player if the time dilation counter is greater than zero to account for the time dilation effect.
+while dilated mechanisms update the player if the time dilation counter variable $\nu_i$ is \textbf{true}
+to account for the time dilation effect.
 The generated commands are executed immediately if the target player is within the same group of the sender,
 otherwise the commands are stored in $M_{\textrm{command}}$.
 Algorithm~\ref{alg:mechanisms} shows the overall iterative process.
@@ -419,7 +426,7 @@ Algorithm~\ref{alg:mechanisms} shows the overall iterative process.
     Compute the view of the universe at this group by algorithm~\ref{alg:viewAtGroup}\;
     \ForEach{data of player $k$ in this group}{
       Update $M_\textrm{current}[k]$ by all regular mechanisms\;
-      \If{$\mu_k \geq 0$}{
+      \If{$\nu_k$ is \textbf{true}}{
         Update $M_\textrm{current}[k]$ by all dilated mechanisms\;
       }
     }
