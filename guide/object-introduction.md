@@ -113,6 +113,7 @@ to be processed once per turn in the model.
 
 ## AI
 
+If you are useing the framework for modeling only, you don't have to work with AI.
 AI-related code should be located in `relativitization/universe/src/main/kotlin/relativitization/universe/ai`. Assume
 that this is the root directory in this section.
 
@@ -127,7 +128,7 @@ will be using to compute the list of commands each turn.
 ## Universe generation
 
 Universe-generation-related code should be located
-in `relativitization/universe/src/main/kotlin/relativitization/universe/generate/method`. Assume that this is the root
+in `relativitization/universe/src/main/kotlin/relativitization/universe/generate`. Assume that this is the root
 directory in this section.
 
 ### Method category: abm, random, testing
