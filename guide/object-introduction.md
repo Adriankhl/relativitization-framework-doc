@@ -8,12 +8,17 @@ A brief introduction to objects in Relativitization:
 4. [AI](#ai)
 5. [Universe generation](#universe-generation)
 
+For a concrete example, see [flocking model](./flocking-model.md).
+
 ## Data
 
-Data-related code should be located in `relativitization/universe/src/main/kotlin/relativitization/universe/data`.
-Assume that this is the root directory in this section.
-
 ### Immutable data and mutable data
+
+While the data of a player should be mutable,
+what the player sees, which involves data of other players,
+should be immutable.
+
+
 
 To avoid error caused by mutability, especially in parallelized processes, most data has an immutable version and a
 mutable version.
