@@ -17,135 +17,92 @@ For a concrete example, see [flocking model](./flocking-model.md).
 While the data of a player should be mutable,
 what the player sees, which involves data of other players,
 should be immutable.
+Since models are ran concurrently under this framework,
+to avoid problems caused by mutability,
+it is recommended to have both a mutable version and an immutable version of the same data.
+A mutable data class should have a name starting with `Mutable` and inherit `MutablePlayerDataComponent`,
+while the immutable counter-part should inherit `PlayerDataComponent`.
+To simplify the development, you can mark a mutable data class by `@GenerateImmutable`,
+which generates the immutable counter-part automatically.
 
+### Copying data
 
-
-To avoid error caused by mutability, especially in parallelized processes, most data has an immutable version and a
-mutable version.
-
-Typically, if the immutable version of a class is named `A`, then the mutable version of the class should be named as
-`MutableA`.
-
-`DataSerializer.copy` in `serializer/DataSerializer.kt` is used to copy data from mutable version of a class to the
-immutable version, or vice versa. To ensure that the serializer works:
-
-* The property names in the immutable version and the mutable version of a class should be the same
-* Use `sealed class` if you need polymorphism
-* If a polymorphic class is stored in some collections, you need to enforce the same serialization name in both the
-  immutable version and the mutable version of the class by the `@SerialName` annotation
+`DataSerializer.copy()` can be used to copy data from mutable version of a class to the
+immutable version, or vice versa.
 
 ### Player data
 
-`PlayerData` in `PlayerData.kt` contains the core data of a player, where `MutablePlayerData` is the corresponding
-mutable version. `PlayerData` stores the basic data of a player, such as the position and velocity. Other data is stored
-in `PlayerInternalData`, such as events and hierarchy of players. The
+`MutablePlayerData` contains the core data of a player, where `PlayerData` is the corresponding
+immutable version. `PlayerData` stores the basic data of a player, such as the position and velocity.
+Other data is stored in `PlayerInternalData`, such as events and hierarchy of players. The
 `playerDataComponentMap` property in `PlayerInternalData` stores model-specific data.
-
-### Player data component
-
-A player data component should inherit `PlayerDataComponent` in `components/PlayerDataComponent.kt`, the mutable
-counterpart should inherit `MutablePlayerDataComponent`, `@SerialName` annotation should be used to unify the
-serialization name for both versions of the class.
-
-`PlayerDataComponentMap` in `components/PlayerDataComponent.kt` stores `PlayerDataComponent` as a map from the
-serialization name to the data component.
 
 ### Global data
 
-`UniverseGlobalData` in `global/UniverseGlobalData.kt` stores the global data of the universe.
+`UniverseGlobalData` stores the global data of the universe,
+where the `globalDataComponentMap` stores the model-specific data.
 
-### Global data component
-
-A global data component should inherit `GlobalDataComponent` in `global/components/GlobalDataComponent.kt`, the mutable
-counterpart should inherit `MutableGlobalDataComponent`, `@SerialName` annotation should be used to unify the
-serialization name for both versions of the class.
-
-`GlobalDataComponentMap` in `global/components/GlobalDataComponent.kt` stores `PlayerDataComponent` as a map from the
-serialization name to the data component.
+A mutable global data component should inherit `MutableGlobalDataComponent`,
+and annotated by `@GenerateImmutable`.
 
 ### Command
 
-Whenever a player wants to interact with another player, it is mediated by commands. A command should inherit `Command`
-in `commands/Command.kt`.
+Whenever a player wants to interact with another player, it is mediated by commands. 
+A command should inherit `Command`.
 
 ### Event
 
-An event of a player generates commands based on the choice of the player or the default choice. An event should inherit
-`Event` in `events/Event.kt`.
+An event of a player generates commands based on the choice of the player or the default choice.
+An event should inherit `Event`.
 
 ### Command availability
 
-Commands and events can be shared among different models. To explicitly constrain the available commands for a model,
-you have to create an object to inherit `CommandAvailability` in `commands/Command.kt`. It stores the names of available
-commands and the names of available events to be added by the `AddEventCommand` in `commands/DefaultEventCommands.kt`.
+Commands and events can be shared among different models.
+To explicitly constrain the available commands for a model,
+you have to create an object to inherit `CommandAvailability`. 
+It stores the names of available commands.
+Additionally, it stores the names of available events that can be used by any event-related commands.
 
 ## Mechanism
 
-Mechanism-related code should be located
-in `relativitization/universe/src/main/kotlin/relativitization/universe/mechanisms`. Assume that this is the root
-directory in this section.
-
-### Mechanism process
-
 Mechanism determines how the data of players should be modified. A mechanism should be an object inheriting
-`Mechanism` in `Mechanism.kt`. The `process` function modifies the player data and generate a list of commands to send
+`Mechanism`. The `process` function modifies the player data and generate a list of commands to send
 from the player.
 
 ### Mechanism lists: regular vs dilated
 
 Mechanisms can be shared among different models. To specify the mechanisms to be processed in a model, you have to
-create an object to inherit `MechanismLists` in `Mechanism.kt`. It stores a list of regular mechanism and a list of
+create an object to inherit `MechanismLists`. It stores a list of regular mechanism and a list of
 dilated mechanism to be processed in the model. Regular mechanisms are executed once per turn, where dilated mechanisms
 is affected by time dilation and they should be executed once per time in average.
 
 ## Global mechanism
 
-Global-mechanism-related code should be located
-in `relativitization/universe/src/main/kotlin/relativitization/universe/global`. Assume that this is the root directory
-in this section.
-
-### Update universe global data
-
 Global mechanism determines how the universe global data should be modified. Be aware that this may break the
 information speed constraint imposed by special relativity if not carefully implemented. A global mechanism should be an
-object inheriting `GlobalMechanism` in `GlobalMechanism.kt`. The `updateGlobalData` function modifies the global data.
+object inheriting `GlobalMechanism`. The `updateGlobalData` function modifies the global data.
 
 ### Global mechanism list
 
 Global mechanisms can be shared among different models. To specify the global mechanisms to be processed in a model, you
-have to create an object to inherit `GlobalMechanismList` in `GlobalMechanism.kt`. It stores a list of global mechanism
+have to create an object to inherit `GlobalMechanismList`. It stores a list of global mechanism
 to be processed once per turn in the model.
 
 ## AI
 
-If you are useing the framework for modeling only, you don't have to work with AI.
-AI-related code should be located in `relativitization/universe/src/main/kotlin/relativitization/universe/ai`. Assume
-that this is the root directory in this section.
+If you are using the framework for modeling only, you may not need to work with AI.
 
-### AI computation
+AI determines the list of commands from a player, the commands will self-execute on the sender 
+and execute on the target receiver. An AI should be an object inheriting `AI` in `AI.kt`.
 
-AI determines the list of commands from a player, the commands will self-execute on the sender and execute on the target
-receiver. An AI should be an object inheriting `AI` in `AI.kt`.
-
-`PlayerInternalData` in [player data](#player-data) stores a property called `aiName`, it determines which AI the player
-will be using to compute the list of commands each turn.
+`PlayerInternalData` in [player data](#player-data) stores a property called `aiName`, 
+it determines which AI the player will be using to compute the list of commands each turn.
 
 ## Universe generation
 
-Universe-generation-related code should be located
-in `relativitization/universe/src/main/kotlin/relativitization/universe/generate`. Assume that this is the root
-directory in this section.
-
-### Method category: abm, random, testing
-
-To clarify the usage of the generation methods, they are divied into three categories:
-
-1. `ABMGenerateUniverseMethod` in `abm/ABMGenerateUniverseMethod.kt`
-2. `RandomGenerateUniverseMethod` in `random/RandomGenerateUniverseMethod.kt`
-3. `TestingGenerateUniverseMethod` in `testing/TestingGenerateUniverseMethod.it`
-
-They have exactly the same functionality. Pick one of them to inherit and create an object to generate universe for your
-model.
+An universe generation object should inherit `GenerateUniverseMethod`.
+The `generate()` function takes `GenerateSettings` and generate an `UniverseData`,
+which is the initial state of the universe.
 
 ### Things to consider
 
